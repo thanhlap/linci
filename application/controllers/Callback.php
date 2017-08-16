@@ -81,7 +81,7 @@ class Callback extends CI_Controller {
 					
 					break;
 				case 2:
-				//kt phone va mk ben api dung thi nhap order
+					//kt phone va mk ben api dung thi nhap order
 					$this->load->library('eyelash_api');
 					$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
 					$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
@@ -107,17 +107,28 @@ class Callback extends CI_Controller {
 					
 					break;
 				case 3:
-
-					if ($result['result'] == "true"){
-						$data_chat['step'] = 4;
-						//$list = $this->eyelash_api->list();
-						$messageData = array(
-							array('type' => 'text', 'text' => "list"), 
-							array('type' => 'text', 'text' => 'step ' . $step)
-						);
+					 	$messageData = array(
+								        'type' => 'template',
+								        'altText' => 'ボタン',
+								        'template' => array(
+								            'type' => 'buttons',
+								            'title' => 'タイトルです',
+								            'text' => '選択してね',
+								            'actions' => array(
+								                array(
+								                    'type' => 'postback',
+								                    'label' => 'webhookにpost送信',
+								                    'data' => 'value'
+								                ),
+								                array(
+								                    'type' => 'uri',
+								                    'label' => 'googleへ移動',
+								                    'uri' => 'https://google.com'
+								                )
+								            )
+								        )
+								    );
 					
-					}
-
 					break;
 				default:
 					$replyMsg = $message->{"text"};
