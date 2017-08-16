@@ -86,22 +86,35 @@ class Callback extends CI_Controller {
 					$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
 					$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
 
+					// if ($result['result'] == "true"){
+					// 	$data_chat['step'] = 3;
+					// 	$replyMsg = '店舗を入力してください。';
+					// 	$messageData = array(
+					// 		array('type' => 'text', 'text' => $replyMsg), 
+					// 		array('type' => 'text', 'text' => 'step ' . $step)
+					// 	);
+					
+					// }else{
+					// 	$data_chat['step'] = 1;
+					// 	$replyMsg = 'Mobile number and password is not valid.';
+					// 	//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
+					// 	$messageData = array(
+					// 		array('type' => 'text', 'text' => $replyMsg),
+					// 		array('type' => 'text', 'text' => '携帯番号を入力してください。')
+					// 	);
+						
+					// }
+
 					if ($result['result'] == "true"){
 						$data_chat['step'] = 3;
 						$replyMsg = '店舗を入力してください。';
-						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg), 
-							array('type' => 'text', 'text' => 'step ' . $step)
-						);
-					
+						$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => 'step ' . $step));
+						
 					}else{
 						$data_chat['step'] = 1;
 						$replyMsg = 'Mobile number and password is not valid.';
 						//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
-						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg),
-							array('type' => 'text', 'text' => '携帯番号を入力してください。')
-						);
+						$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
 						
 					}
 					
