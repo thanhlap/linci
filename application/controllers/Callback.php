@@ -101,18 +101,18 @@ class Callback extends CI_Controller {
 								array('type' => 'text', 'text' => $replyMsg), 
 								array('type' => 'text', 'text' => 'step ' . $step),
 
-								array('type' => 'buttons', 'actions' => 
-										array(
-											'type' => 'postback',
-											'label' => 'webhookにpost送信',
-											'data' => 'value'
-										),
-										// array(
-										// 	'type' => 'uri',
-										// 	'label' => 'googleへ移動',
-										// 	'uri' => 'https://google.com'
-										// )
-									)
+								// array('type' => 'buttons', 'actions' => 
+								// 		array(
+								// 			'type' => 'postback',
+								// 			'label' => 'webhookにpost送信',
+								// 			'data' => 'value'
+								// 		),
+								// 		// array(
+								// 		// 	'type' => 'uri',
+								// 		// 	'label' => 'googleへ移動',
+								// 		// 	'uri' => 'https://google.com'
+								// 		// )
+								// 	)
 							);	
 							
 
