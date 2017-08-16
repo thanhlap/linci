@@ -118,6 +118,11 @@ class Callback extends CI_Controller {
 						            ]
 						        ]
 						    ];
+						}else{
+							$messageData = array(
+								array('type' => 'text', 'text' => $message->{"text"}), 
+								array('type' => 'text', 'text' => 'step ' . $step)
+							);
 						}
 
 					}else{
