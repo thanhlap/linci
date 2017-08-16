@@ -92,7 +92,7 @@ class Callback extends CI_Controller {
 						$replyMsg = '店舗を入力してください。';
 						$messageData = array(
 							array('type' => 'text', 'text' => $replyMsg), 
-							array('type' => 'text', 'text' => 'step ' . $step)
+							// array('type' => 'text', 'text' => 'step ' . $step)
 						);
 						
 					}else{
@@ -111,7 +111,7 @@ class Callback extends CI_Controller {
 					$replyMsg = $message->{"text"};
 					$messageData = array(
 						array('type' => 'text', 'text' => $replyMsg),
-						array('type' => 'text', 'text' => 'step ' . $step)
+						// array('type' => 'text', 'text' => 'step ' . $step)
 					);
 			}
 			//luu data table chat_log
