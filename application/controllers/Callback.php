@@ -114,7 +114,7 @@ class Callback extends CI_Controller {
 								// 		// )
 								// 	)
 							);	
-							
+						}	
 
 					}else{
 						$data_chat['step'] = 1;
