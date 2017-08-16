@@ -95,7 +95,6 @@ class Callback extends CI_Controller {
 						// );
 						$messageData = array(
 								        'type' => 'template',
-								        'altText' => 'ボタン',
 								        'template' => array(
 								            'type' => 'buttons',
 								            'title' => 'タイトルです',
@@ -114,7 +113,7 @@ class Callback extends CI_Controller {
 								            )
 								        )
 								    );
-								    					
+
 					}else{
 						$data_chat['step'] = 1;
 						$replyMsg = 'Mobile number and password is not valid.';
