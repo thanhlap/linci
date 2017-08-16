@@ -95,25 +95,48 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						if ($message->{"text"} == '確認') {
+						if ($result['result'] == "true" && $message->{"text"} == '確認') {
 							$data_chat['step'] = 4;
-							$messageData = array(
-								array('type' => 'text', 'text' => $replyMsg), 
-								array('type' => 'text', 'text' => 'step ' . $step),
+							$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
+							$messageData = [
+									'type' => 'template',
+									'altText' => 'ボタン',
+									'template' => [
+											'type' => 'buttons',
+											'title' => 'タイトルです',
+											'text' => '選択してね',
+											'actions' => [
+													[
+															'type' => 'postback',
+															'label' => 'webhookにpost送信',
+															'data' => 'value'
+													],
+													[
+															'type' => 'uri',
+															'label' => 'googleへ移動',
+															'uri' => 'https://google.com'
+													]
+											]
+									]
+							];
 
-								// array('type' => 'buttons', 'actions' => 
-								// 		array(
-								// 			'type' => 'postback',
-								// 			'label' => 'webhookにpost送信',
-								// 			'data' => 'value'
-								// 		),
-								// 		// array(
-								// 		// 	'type' => 'uri',
-								// 		// 	'label' => 'googleへ移動',
-								// 		// 	'uri' => 'https://google.com'
-								// 		// )
-								// 	)
-							);	
+							// $messageData = array(
+							// 	array('type' => 'text', 'text' => $replyMsg), 
+							// 	array('type' => 'text', 'text' => 'step ' . $step),
+
+							// 	// array('type' => 'buttons', 'actions' => 
+							// 	// 		array(
+							// 	// 			'type' => 'postback',
+							// 	// 			'label' => 'webhookにpost送信',
+							// 	// 			'data' => 'value'
+							// 	// 		),
+							// 	// 		// array(
+							// 	// 		// 	'type' => 'uri',
+							// 	// 		// 	'label' => 'googleへ移動',
+							// 	// 		// 	'uri' => 'https://google.com'
+							// 	// 		// )
+							// 	// 	)
+							// );	
 						}	
 
 					}else{
