@@ -160,37 +160,43 @@ class Callback extends CI_Controller {
 		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 
 
-		if ($message->{"text"} == '予約' || $message->{"text"} == '予約する' ) {
-		            // 確認ダイアログタイプ
-		            $messageData = [
-		                'type' => 'template',
-		                'altText' => '予約',
-		                'template' => [
-		                    'type' => 'confirm',
-		                    'text' => '携帯番号を入力してください？',
-		                    'actions' => [
-		                        [
-		                            'type' => 'message',
-		                            'label' => '元気です',
-		                            'text' => '元気です'
-		                        ],
-		                        [
-		                            'type' => 'message',
-		                            'label' => 'まあまあです',
-		                            'text' => 'まあまあです'
-		                        ],
-		                    ]
-		                ]
-		            ];      
-		    }else {
+		// if ($message->{"text"} == '予約' || $message->{"text"} == '予約する' ) {
+		//             // 確認ダイアログタイプ
+		//             $messageData = [
+		//                 'type' => 'template',
+		//                 'altText' => '予約',
+		//                 'template' => [
+		//                     'type' => 'confirm',
+		//                     'text' => '携帯番号を入力してください？',
+		//                     'actions' => [
+		//                         [
+		//                             'type' => 'message',
+		//                             'label' => '元気です',
+		//                             'text' => '元気です'
+		//                         ],
+		//                         [
+		//                             'type' => 'message',
+		//                             'label' => 'まあまあです',
+		//                             'text' => 'まあまあです'
+		//                         ],
+		//                     ]
+		//                 ]
+		//             ];      
+		//     }else {
 		           
-		    // // trả lời message hiện tại
-		    $messageData = [
-		        'type' => 'text',
-		        'text' => $message->{"text"}
-		    ];
+		//     // // trả lời message hiện tại
+		//     $messageData = [
+		//         'type' => 'text',
+		//         'text' => $message->{"text"}
+		//     ];
 
-		}
+		// }
+
+
+		$messageData = [
+	        'type' => 'text',
+	        'text' => $message->{"text"}
+	    ];
 
 
 		 //Các loại phản hoài có nội dung
