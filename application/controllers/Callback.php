@@ -107,6 +107,8 @@ class Callback extends CI_Controller {
 					
 					break;
 				case 3:
+					if (isset($result['result'] == "true"){
+
 					 	$messageData = array(
 								        'type' => 'template',
 								        'altText' => 'ボタン',
@@ -128,6 +130,7 @@ class Callback extends CI_Controller {
 								            )
 								        )
 								    );
+					}
 					
 					break;
 				default:
