@@ -5,7 +5,7 @@ class Callback extends CI_Controller {
 	
 	public function index()
 	{
-		$accessToken = 'fc0oTVl6156HKVz3FUz8t1nlvC1OpZMYy9IWmSblG1HKEy5bKUI28YqIz70Gbcr0fEYusYUoOAqneRqIPpe4q1ARZ36TwLj+XBQhqXfimafkhHdsW4bXmmTjen9Dpt110AbUy3aEeFJ0PJp9RncxMAdB04t89/1O/w1cDnyilFU=';
+		$accessToken = 'CCTtRhug6RnXVdzkA88/gSRGGs28FtVCLrU1J0kEHB9pbzTgjM+j4S33vpj0uG1yHpTP67spi9zuY3WZVuSQueHXmJztPhyziWO13It8T3N+lvO4XEamCez7HhW1VvLjdXkVLCFEcy9XetSieJ2+IQdB04t89/1O/w1cDnyilFU=';
 		
 		$jsonString = file_get_contents('php://input');
 		//$jsonString = '{"events":[{"type":"message","replyToken":"a0bd76fe7d50445cafa76229aeaeaec8","source":{"userId":"U2c424933e5678e93fc68a2f631bc2818","type":"user"},"timestamp":1502685265679,"message":{"type":"text","id":"6540861500362","text":"予約"}}]}';
