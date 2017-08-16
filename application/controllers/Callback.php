@@ -89,31 +89,31 @@ class Callback extends CI_Controller {
 					if ($result['result'] == "true"){
 						$data_chat['step'] = 3;
 						$replyMsg = '店舗を入力してください。';
-						// $messageData = array(
-						// 	array('type' => 'text', 'text' => $replyMsg), 
-						// 	array('type' => 'text', 'text' => 'step ' . $step)
-						// );
 						$messageData = array(
-									        'type' => 'template',
-									        'text' => $replyMsg,
-									        'template' => array(
-									            'type' => 'buttons',
-									            'title' => 'タイトルです',
-									            'text' => '選択してね',
-									            'actions' => array(
-									                array(
-									                    'type' => 'postback',
-									                    'label' => 'webhookにpost送信',
-									                    'data' => 'value'
-									                ),
-									                array(
-									                    'type' => 'uri',
-									                    'label' => 'googleへ移動',
-									                    'uri' => 'https://google.com'
-									                )
-									            )
-									        )
-									    );					
+							array('type' => 'text', 'text' => $replyMsg), 
+							array('type' => 'text', 'text' => 'step ' . $step)
+						);
+						// $messageData = array(
+						// 			        'type' => 'template',
+						// 			        'text' => $replyMsg,
+						// 			        'template' => array(
+						// 			            'type' => 'buttons',
+						// 			            'title' => 'タイトルです',
+						// 			            'text' => '選択してね',
+						// 			            'actions' => array(
+						// 			                array(
+						// 			                    'type' => 'postback',
+						// 			                    'label' => 'webhookにpost送信',
+						// 			                    'data' => 'value'
+						// 			                ),
+						// 			                array(
+						// 			                    'type' => 'uri',
+						// 			                    'label' => 'googleへ移動',
+						// 			                    'uri' => 'https://google.com'
+						// 			                )
+						// 			            )
+						// 			        )
+						// 			    );					
 					}else{
 						$data_chat['step'] = 1;
 						$replyMsg = 'Mobile number and password is not valid.';
