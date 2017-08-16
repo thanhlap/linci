@@ -59,7 +59,8 @@ class Callback extends CI_Controller {
 		
 		// neu msg= "予約"" || msg= "予約する"" luu vao table chat_log
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
-			//$data_chat['step'] = 1;
+			// $data_chat['step'] = 1;
+			$step = $data_chat['step'];
 			$this->Chat_log->insert($data_chat);
 			//hoi phone
 			$messageData = array(
