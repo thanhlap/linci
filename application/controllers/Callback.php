@@ -107,13 +107,12 @@ class Callback extends CI_Controller {
 					
 					break;
 				case 3:
-				    $this->load->library('eyelash_api');
-					$list = $this->eyelash_api->list($lastMsg['message_ref'], $message->{"text"});
-					$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
-					if ($list['list'] == "true"){
+
+					if ($result['result'] == "true"){
 						$data_chat['step'] = 4;
+						//$list = $this->eyelash_api->list();
 						$messageData = array(
-							array('type' => 'text', 'text' => $list), 
+							array('type' => 'text', 'text' => "list"), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
 					
