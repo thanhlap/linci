@@ -88,28 +88,12 @@ class Callback extends CI_Controller {
 
 					if ($result['result'] == "true"){
 						$data_chat['step'] = 3;
-						$replyMsg = '店舗を入力してください。';
+						// $replyMsg = '店舗を入力してください。';
+						// $messageData = array(
+						// 	array('type' => 'text', 'text' => $replyMsg), 
+						// 	array('type' => 'text', 'text' => 'step ' . $step)
+						// );
 						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg), 
-							array('type' => 'text', 'text' => 'step ' . $step)
-						);
-					
-					}else{
-						$data_chat['step'] = 1;
-						$replyMsg = 'Mobile number and password is not valid.';
-						//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
-						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg),
-							array('type' => 'text', 'text' => '携帯番号を入力してください。')
-						);
-						
-					}
-					
-					break;
-				case 3:
-					if (isset($result['result'] == "true"){
-
-					 	$messageData = array(
 								        'type' => 'template',
 								        'altText' => 'ボタン',
 								        'template' => array(
@@ -130,9 +114,22 @@ class Callback extends CI_Controller {
 								            )
 								        )
 								    );
+								    					
+					}else{
+						$data_chat['step'] = 1;
+						$replyMsg = 'Mobile number and password is not valid.';
+						//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
+						$messageData = array(
+							array('type' => 'text', 'text' => $replyMsg),
+							array('type' => 'text', 'text' => '携帯番号を入力してください。')
+						);
+						
 					}
 					
 					break;
+				
+					 	
+									
 				default:
 					$replyMsg = $message->{"text"};
 					$messageData = array(
