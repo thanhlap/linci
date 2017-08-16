@@ -2,7 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Callback extends CI_Controller {
-	
+
+
 	public function index()
 	{
 		$accessToken = 'CCTtRhug6RnXVdzkA88/gSRGGs28FtVCLrU1J0kEHB9pbzTgjM+j4S33vpj0uG1yHpTP67spi9zuY3WZVuSQueHXmJztPhyziWO13It8T3N+lvO4XEamCez7HhW1VvLjdXkVLCFEcy9XetSieJ2+IQdB04t89/1O/w1cDnyilFU=';
@@ -12,17 +13,24 @@ class Callback extends CI_Controller {
 		error_log($jsonString);
 		$jsonObj = json_decode($jsonString);
 
-		$source = $jsonObj->{"events"}[0]->{"source"};
-		$source_user_id = $source->{"userId"};
-		$message = $jsonObj->{"events"}[0]->{"message"};
-		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
+
+
+		// $source = $jsonObj->{"events"}[0]->{"source"};
+		// $source_user_id = $source->{"userId"};
+		// $message = $jsonObj->{"events"}[0]->{"message"};
+		// $replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 		
 		$dataLog = array(
 				'key_name' => 'jsonString',
 				'key_value' => $jsonString
 		);
+
 		$this->load->model('Log_model');
 		$this->Log_model->insert($dataLog);
+
+		exit();
+
+
 		$this->load->model('Chat_log');
 		$lastMsg = $this->Chat_log->getLastMsgByUserID($source_user_id);
 		$step = $lastMsg['step'];
