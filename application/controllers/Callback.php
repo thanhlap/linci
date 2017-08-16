@@ -13,13 +13,7 @@ class Callback extends CI_Controller {
 		error_log($jsonString);
 		$jsonObj = json_decode($jsonString);
 
-
-
-		// $source = $jsonObj->{"events"}[0]->{"source"};
-		// $source_user_id = $source->{"userId"};
-		// $message = $jsonObj->{"events"}[0]->{"message"};
-		// $replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
-		
+		//luu bang log
 		$dataLog = array(
 				'key_name' => 'jsonString',
 				'key_value' => $jsonString
@@ -28,11 +22,25 @@ class Callback extends CI_Controller {
 		$this->load->model('Log_model');
 		$this->Log_model->insert($dataLog);
 
-		exit();
+//mang dlieu dc luu
+//{"events":[
+	// 	{
+	// 	"type":"message",
+	// 	"replyToken":"02cda49427d44245ad48fa12e9aac1ec",
+	// 	"source":{"userId":"U1b3204f97941cef5de9bab6d572104e5","type":"user"},
+	// 	"timestamp":1502855278336,
+	// 	"message":{"type":"text","id":"6550640608491","text":"予約"}}
+	// ]}
 
-
+		$source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
+		$source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
+		$message = $jsonObj->{"events"}[0]->{"message"}; //vao mang message
+		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
+		
 		$this->load->model('Chat_log');
 		$lastMsg = $this->Chat_log->getLastMsgByUserID($source_user_id);
+
+		exit();
 		$step = $lastMsg['step'];
 		$replyMsg = "";
 
