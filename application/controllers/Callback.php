@@ -64,7 +64,7 @@ class Callback extends CI_Controller {
 			//hoi phone
 			$messageData = array(
 				array('type' => 'text', 'text' => "携帯番号を入力してください。?"), 
-				// array('type' => 'text', 'text' => 'start')
+				array('type' => 'text', 'text' => 'start')
 			);
 			
 		} else{
