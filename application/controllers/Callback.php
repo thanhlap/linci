@@ -40,7 +40,7 @@ class Callback extends CI_Controller {
 		$this->load->model('Chat_log');
 		//kt userId hien tai
 		$lastMsg = $this->Chat_log->getLastMsgByUserID($source_user_id);
-		$step = $lastMsg['step'];
+		$step = $lastMsg['step']; //lay step cua id do
 
 		$replyMsg = "";
 
@@ -81,7 +81,7 @@ class Callback extends CI_Controller {
 					
 					break;
 				case 2:
-				//kt phone va mk dung k
+				//kt phone va mk ben api dung thi nhap order
 					$this->load->library('eyelash_api');
 					$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
 					$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . ', password: ' . $message->{"text"};
@@ -110,7 +110,7 @@ class Callback extends CI_Controller {
 					$replyMsg = $message->{"text"};
 					$messageData = array(
 						array('type' => 'text', 'text' => $replyMsg),
-						// array('type' => 'text', 'text' => 'step ' . $step)
+						array('type' => 'text', 'text' => 'step ' . $step)
 					);
 			}
 			//luu data table chat_log
