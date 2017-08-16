@@ -38,10 +38,10 @@ class Callback extends CI_Controller {
 		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
 		
 		$this->load->model('Chat_log');
+		//kt userId hien tai
 		$lastMsg = $this->Chat_log->getLastMsgByUserID($source_user_id);
+		// $step = $lastMsg['step'];
 
-		exit();
-		$step = $lastMsg['step'];
 		$replyMsg = "";
 
 		$data_chat = array(
@@ -59,18 +59,14 @@ class Callback extends CI_Controller {
 		
 		// 送られてきたメッセージの中身からレスポンスのタイプを選択
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
-			$data_chat['step'] = 1;
+			//$data_chat['step'] = 1;
 			$this->Chat_log->insert($data_chat);
-			// それ以外は送られてきたテキストをオウム返し
-// 			$messageData = [
-// 					'type' => 'text', 'text' => '携帯番号を入力してください。'
-// 			];
-			$messageData = array(array('type' => 'text', 'text' => "携帯番号を入力してください。"), array('type' => 'text', 'text' => 'start'));
+
+			$messageData = array(
+				array('type' => 'text', 'text' => "携帯番号を入力してください。"), 
+				array('type' => 'text', 'text' => 'start')
+			);
 			
-// 			$messageData = array(
-// 				array('type' => 'text', 'text' => '携帯番号を入力してください。'),
-// 				array('type' => 'text', 'text' => '1')
-// 			);
 		} else{
 			switch ($step){
 				case 1:
