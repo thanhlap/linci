@@ -93,7 +93,7 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-
+						
 					}else{
 						$data_chat['step'] = 1;
 						$replyMsg = 'Mobile number and password is not valid.';
@@ -105,19 +105,7 @@ class Callback extends CI_Controller {
 						
 					}
 					
-				break;
-				// case 3:
-				// 		// $list = $this->eyelash_api->list($lastMsg['message_ref'] ,$message->{"text"});
-				// 		// $data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
-				// 		// if($list['list'] == "true"){
-				// 		// 	$data_chat['step'] = 4;
-				// 		// 	$messageData = array(
-				// 		// 		array('type' => 'text', 'text' => $list), 
-				// 		// 		array('type' => 'text', 'text' => 'step ' . $step)
-				// 		// 	);
-				// 		// }
-
-				// 	break;
+					break;
 				default:
 					$replyMsg = $message->{"text"};
 					$messageData = array(
