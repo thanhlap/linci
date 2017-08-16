@@ -11,7 +11,6 @@ class Callback extends CI_Controller {
 		error_log($jsonString);
 		$jsonObj = json_decode($jsonString);
 
-
 		//mang dlieu dc luu
 		//{"events":[
 		// 	{
