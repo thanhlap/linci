@@ -95,9 +95,10 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						if ($result['result'] == "true" && $message->{"text"} == '確認') {
+						if ($result['result'] == "true" && $message->{"text"} == 'ボタン') {
 							$data_chat['step'] = 4;
 							$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
+							
 							$messageData = [
 									'type' => 'template',
 									'altText' => 'ボタン',
@@ -119,7 +120,7 @@ class Callback extends CI_Controller {
 											]
 									]
 							];
-
+							
 							// $messageData = array(
 							// 	array('type' => 'text', 'text' => $replyMsg), 
 							// 	array('type' => 'text', 'text' => 'step ' . $step),
