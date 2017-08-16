@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-<<<<<<< HEAD
-=======
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
@@ -72,22 +70,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
->>>>>>> 5793f9ff1d9bedd0f5038a17bb3592437ff69e75
 $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'sql12.freemysqlhosting.net',
-<<<<<<< HEAD
+	'hostname' => 'sql9.freemysqlhosting.net',
 	'username' => 'sql9190007',
 	'password' => 'ntVIcC11yi',
 	'database' => 'sql9190007',
-=======
-	'username' => 'sql12189989',
-	'password' => 'u6Whar87bh',
-	'database' => 'sql12189989',
->>>>>>> 5793f9ff1d9bedd0f5038a17bb3592437ff69e75
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
