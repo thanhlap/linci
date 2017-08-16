@@ -57,14 +57,14 @@ class Callback extends CI_Controller {
 				'step' => 1
 		);
 		
-		// 送られてきたメッセージの中身からレスポンスのタイプを選択
+		// neu msg= "予約"" || msg= "予約する"" luu vao table chat_log
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
 			//$data_chat['step'] = 1;
 			$this->Chat_log->insert($data_chat);
-
+			//hoi phone
 			$messageData = array(
-				array('type' => 'text', 'text' => "携帯番号を入力してください。"), 
-				array('type' => 'text', 'text' => 'start')
+				array('type' => 'text', 'text' => "携帯番号を入力してください。?"), 
+				// array('type' => 'text', 'text' => 'start')
 			);
 			
 		} else{
@@ -72,38 +72,48 @@ class Callback extends CI_Controller {
 				case 1:
 					$data_chat['step'] = 2;
 					$data_chat['message_ref'] = $message->{"text"};
-					$replyMsg = 'パスワードを入力してください。';
+					$replyMsg = 'パスワードを入力してください。?';
 
-					$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => 'step ' . $step));
+					$messageData = array(
+						array('type' => 'text', 'text' => $replyMsg),
+						// array('type' => 'text', 'text' => 'step ' . $step)
+					);
 					
 					break;
 				case 2:
+				//kt phone va mk dung k
 					$this->load->library('eyelash_api');
 					$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
 					$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . ', password: ' . $message->{"text"};
+
 					if ($result['result'] == "true"){
 						$data_chat['step'] = 3;
 						$replyMsg = '店舗を入力してください。';
-						$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => 'step ' . $step));
+						$messageData = array(
+							array('type' => 'text', 'text' => $replyMsg), 
+							array('type' => 'text', 'text' => 'step ' . $step)
+						);
 						
 					}else{
 						$data_chat['step'] = 1;
 						$replyMsg = 'Mobile number and password is not valid.';
 						//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
-						$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
+						$messageData = array(
+							array('type' => 'text', 'text' => $replyMsg),
+							array('type' => 'text', 'text' => '携帯番号を入力してください。')
+						);
 						
 					}
 					
 					break;
 				default:
 					$replyMsg = $message->{"text"};
-					$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => 'step ' . $step));
+					$messageData = array(
+						array('type' => 'text', 'text' => $replyMsg),
+						array('type' => 'text', 'text' => 'step ' . $step)
+					);
 			}
-			
-// 			$messageData = [
-// 					'type' => 'text',
-// 					'text' => $replyMsg
-// 			];
+			//luu data table chat_log
 			$this->Chat_log->insert($data_chat);
 		}
 		
@@ -203,6 +213,9 @@ class Callback extends CI_Controller {
 // 			];
 		}
 		
+
+
+
 		$response = [
 				'replyToken' => $replyToken,
 				'messages' => $messageData
