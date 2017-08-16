@@ -95,7 +95,7 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						if ($message->{"text"} == '確認') {
+						if ($data_chat['step'] == 3 && $message->{"text"} == '確認') {
 							// 確認ダイアログタイプ
 							$messageData = [
 									'type' => 'template',
@@ -118,7 +118,7 @@ class Callback extends CI_Controller {
 									]
 							];
 						}
-						
+
 					}else{
 						$data_chat['step'] = 1;
 						$replyMsg = 'Mobile number and password is not valid.';
@@ -144,101 +144,101 @@ class Callback extends CI_Controller {
 			$this->Chat_log->insert($data_chat);
 		}
 		
-		if ($message->{"text"} == '確認') {
-			// 確認ダイアログタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => '確認ダイアログ',
-					'template' => [
-							'type' => 'confirm',
-							'text' => '元気ですかー？',
-							'actions' => [
-									[
-											'type' => 'message',
-											'label' => '元気です',
-											'text' => '元気です'
-									],
-									[
-											'type' => 'message',
-											'label' => 'まあまあです',
-											'text' => 'まあまあです'
-									],
-							]
-					]
-			];
-		} elseif ($message->{"text"} == 'ボタン') {
-			// ボタンタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => 'ボタン',
-					'template' => [
-							'type' => 'buttons',
-							'title' => 'タイトルです',
-							'text' => '選択してね',
-							'actions' => [
-									[
-											'type' => 'postback',
-											'label' => 'webhookにpost送信',
-											'data' => 'value'
-									],
-									[
-											'type' => 'uri',
-											'label' => 'googleへ移動',
-											'uri' => 'https://google.com'
-									]
-							]
-					]
-			];
-		} elseif ($message->{"text"} == 'カルーセル') {
-			// カルーセルタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => 'カルーセル',
-					'template' => [
-							'type' => 'carousel',
-							'columns' => [
-									[
-											'title' => 'カルーセル1',
-											'text' => 'カルーセル1です',
-											'actions' => [
-													[
-															'type' => 'postback',
-															'label' => 'webhookにpost送信',
-															'data' => 'value'
-													],
-													[
-															'type' => 'uri',
-															'label' => '美容の口コミ広場を見る',
-															'uri' => 'http://clinic.e-kuchikomi.info/'
-													]
-											]
-									],
-									[
-											'title' => 'カルーセル2',
-											'text' => 'カルーセル2です',
-											'actions' => [
-													[
-															'type' => 'postback',
-															'label' => 'webhookにpost送信',
-															'data' => 'value'
-													],
-													[
-															'type' => 'uri',
-															'label' => '女美会を見る',
-															'uri' => 'https://jobikai.com/'
-													]
-											]
-									],
-							]
-					]
-			];
-		} else {
-// 			// それ以外は送られてきたテキストをオウム返し
+// 		if ($message->{"text"} == '確認') {
+// 			// 確認ダイアログタイプ
 // 			$messageData = [
-// 					'type' => 'text',
-// 					'text' => $message->{"text"}
+// 					'type' => 'template',
+// 					'altText' => '確認ダイアログ',
+// 					'template' => [
+// 							'type' => 'confirm',
+// 							'text' => '元気ですかー？',
+// 							'actions' => [
+// 									[
+// 											'type' => 'message',
+// 											'label' => '元気です',
+// 											'text' => '元気です'
+// 									],
+// 									[
+// 											'type' => 'message',
+// 											'label' => 'まあまあです',
+// 											'text' => 'まあまあです'
+// 									],
+// 							]
+// 					]
 // 			];
-		}
+// 		} elseif ($message->{"text"} == 'ボタン') {
+// 			// ボタンタイプ
+// 			$messageData = [
+// 					'type' => 'template',
+// 					'altText' => 'ボタン',
+// 					'template' => [
+// 							'type' => 'buttons',
+// 							'title' => 'タイトルです',
+// 							'text' => '選択してね',
+// 							'actions' => [
+// 									[
+// 											'type' => 'postback',
+// 											'label' => 'webhookにpost送信',
+// 											'data' => 'value'
+// 									],
+// 									[
+// 											'type' => 'uri',
+// 											'label' => 'googleへ移動',
+// 											'uri' => 'https://google.com'
+// 									]
+// 							]
+// 					]
+// 			];
+// 		} elseif ($message->{"text"} == 'カルーセル') {
+// 			// カルーセルタイプ
+// 			$messageData = [
+// 					'type' => 'template',
+// 					'altText' => 'カルーセル',
+// 					'template' => [
+// 							'type' => 'carousel',
+// 							'columns' => [
+// 									[
+// 											'title' => 'カルーセル1',
+// 											'text' => 'カルーセル1です',
+// 											'actions' => [
+// 													[
+// 															'type' => 'postback',
+// 															'label' => 'webhookにpost送信',
+// 															'data' => 'value'
+// 													],
+// 													[
+// 															'type' => 'uri',
+// 															'label' => '美容の口コミ広場を見る',
+// 															'uri' => 'http://clinic.e-kuchikomi.info/'
+// 													]
+// 											]
+// 									],
+// 									[
+// 											'title' => 'カルーセル2',
+// 											'text' => 'カルーセル2です',
+// 											'actions' => [
+// 													[
+// 															'type' => 'postback',
+// 															'label' => 'webhookにpost送信',
+// 															'data' => 'value'
+// 													],
+// 													[
+// 															'type' => 'uri',
+// 															'label' => '女美会を見る',
+// 															'uri' => 'https://jobikai.com/'
+// 													]
+// 											]
+// 									],
+// 							]
+// 					]
+// 			];
+// 		} else {
+// // 			// それ以外は送られてきたテキストをオウム返し
+// // 			$messageData = [
+// // 					'type' => 'text',
+// // 					'text' => $message->{"text"}
+// // 			];
+// 		}
 		
 
 
