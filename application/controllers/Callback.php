@@ -254,7 +254,7 @@ class Callback extends CI_Controller {
 
 		$response = [
 				'replyToken' => $replyToken,
-				'messages' => [$messageData] //$messageData
+				'messages' => /*[$messageData]*/ $messageData
 				//'messages' => [$messageData, array('type' => 'step', 'text' => $step)]
 				//'messages' => array(array('type' => 'text', 'text' => "qw"), array('type' => 'text', 'text' => '1234'))
 		];
