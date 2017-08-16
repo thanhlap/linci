@@ -93,7 +93,7 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						
+					
 					}else{
 						$data_chat['step'] = 1;
 						$replyMsg = 'Mobile number and password is not valid.';
@@ -122,7 +122,7 @@ class Callback extends CI_Controller {
 
 
 
-		// //test 
+		// //test list
 		// if ($message->{"text"} == '確認') {
 		//     // 確認ダイアログタイプ
 		//     $messageData = [
@@ -223,7 +223,7 @@ class Callback extends CI_Controller {
 
 		$response = [
 				'replyToken' => $replyToken,
-				'messages' => /*[$messageData]*/ $messageData
+				'messages' => [$messageData] //$messageData
 				//'messages' => [$messageData, array('type' => 'step', 'text' => $step)]
 				//'messages' => array(array('type' => 'text', 'text' => "qw"), array('type' => 'text', 'text' => '1234'))
 		];
