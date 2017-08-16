@@ -107,18 +107,13 @@ class Callback extends CI_Controller {
 					
 					break;
 				default:
+					$data_chat['step'] = 2;
 					// $replyMsg = $message->{"text"};
 					// $messageData = array(
 					// 	array('type' => 'text', 'text' => $replyMsg),
 					// 	array('type' => 'text', 'text' => 'step ' . $step)
 					// );
-					$data_chat['step'] = 1;
-					$replyMsg = 'Mobile number and password is not valid.';
-					//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
-					$messageData = array(
-						array('type' => 'text', 'text' => $replyMsg),
-						array('type' => 'text', 'text' => '携帯番号を入力してください。')
-					);
+					
 
 			}
 			//luu data table chat_log
