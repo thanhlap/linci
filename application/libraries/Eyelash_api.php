@@ -50,49 +50,49 @@ class Eyelash_api{
 		}
 	}
 
-	// function list($mobile ,  $password){
-	// 		$curl = curl_init();
+	function list($mobile ,  $password){
+			$curl = curl_init();
 
-	// 		curl_setopt_array($curl, array(
-	// 		CURLOPT_URL => "https://web.eyelashs.jp/Procare1/api/staffs/list.xml",
-	// 		CURLOPT_RETURNTRANSFER => true,
-	// 		CURLOPT_ENCODING => "",
-	// 		CURLOPT_MAXREDIRS => 10,
-	// 		CURLOPT_TIMEOUT => 30,
-	// 		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-	// 		CURLOPT_CUSTOMREQUEST => "POST",
-	// 		CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\">\r\n
-	// 								<xml>\r\n   
-	// 								 	<auth>\r\n 
-	// 								        <username>$mobile</username>\r\n  
-	// 								        <password>$password</password>\r\n  
-	// 								    </auth>\r\n   
-	// 			                		<lang>jp</lang>\r\n 
-	// 			                   		<datetime></datetime>\r\n 
-	// 			                      	<action>staffs</action>\r\n 
-	// 			                        <search>\r\n    
-	// 			                            <store_id></store_id>\r\n 
-	// 			                        </search>\r\n
-	// 								</xml>\r\n",
-	// 		CURLOPT_HTTPHEADER => array(
-	// 				"cache-control: no-cache",
-	// 				"content-type: application/xml",
-	// 				"postman-token: 18abd983-2498-886c-485f-c05c3cf62e49"
-	// 			),
-	// 		));
+			curl_setopt_array($curl, array(
+			CURLOPT_URL => "https://web.eyelashs.jp/Procare1/api/staffs/list.xml",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n
+									<xml>\r\n   
+									 	<auth>\r\n 
+									        <username>$mobile</username>\r\n  
+									        <password>$password</password>\r\n  
+									    </auth>\r\n   
+				                		<lang>jp</lang>\r\n 
+				                   		<datetime></datetime>\r\n 
+				                      	<action>staffs</action>\r\n 
+				                        <search>\r\n    
+				                            <store_id></store_id>\r\n 
+				                        </search>\r\n
+									</xml>\r\n",
+			CURLOPT_HTTPHEADER => array(
+					"cache-control: no-cache",
+					"content-type: application/xml",
+					"postman-token: 18abd983-2498-886c-485f-c05c3cf62e49"
+				),
+			));
 
-	// 		$response = curl_exec($curl);
-	// 		$err = curl_error($curl);
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
 
-	// 		curl_close($curl);
+			curl_close($curl);
 
-	// 		if ($err) {
-	// 			return null;
-	// 		} else {
-	// 			$list = json_decode(json_encode(simplexml_load_string($response)), true);
-	// 			return $list;
-	// 		}
-	// }
+			if ($err) {
+				return null;
+			} else {
+				$list = json_decode(json_encode(simplexml_load_string($response)), true);
+				return $list;
+			}
+	}
 
 
 }
