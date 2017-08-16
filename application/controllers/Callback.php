@@ -159,104 +159,137 @@ class Callback extends CI_Controller {
 		$message = $jsonObj->{"events"}[0]->{"message"};
 		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
 
-		 //Các loại phản hoài có nội dung
-        if ($message->{"text"} == '確認') {
-            // 確認ダイアログタイプ
-            $messageData = [
-                'type' => 'template',
-                'altText' => '確認ダイアログ',
-                'template' => [
-                    'type' => 'confirm',
-                    'text' => '元気ですかー？',
-                    'actions' => [
-                        [
-                            'type' => 'message',
-                            'label' => '元気です',
-                            'text' => '元気です'
-                        ],
-                        [
-                            'type' => 'message',
-                            'label' => 'まあまあです',
-                            'text' => 'まあまあです'
-                        ],
-                    ]
-                ]
-            ];
-        } elseif ($message->{"text"} == 'ボタン') {
-            // ボタンタイプ
-            $messageData = [
-                'type' => 'template',
-                'altText' => 'ボタン',
-                'template' => [
-                    'type' => 'buttons',
-                    'title' => 'タイトルです',
-                    'text' => '選択してね',
-                    'actions' => [
-                        [
-                            'type' => 'postback',
-                            'label' => 'webhookにpost送信',
-                            'data' => 'value'
-                        ],
-                        [
-                            'type' => 'uri',
-                            'label' => 'googleへ移動',
-                            'uri' => 'https://google.com'
-                        ]
-                    ]
-                ]
-            ];
-        } elseif ($message->{"text"} == 'カルーセル') {
-            // カルーセルタイプ
-            $messageData = [
-                'type' => 'template',
-                'altText' => 'カルーセル',
-                'template' => [
-                    'type' => 'carousel',
-                    'columns' => [
-                        [
-                            'title' => 'カルーセル1',
-                            'text' => 'カルーセル1です',
-                            'actions' => [
-                                [
-                                    'type' => 'postback',
-                                    'label' => 'webhookにpost送信',
-                                    'data' => 'value'
-                                ],
-                                [
-                                    'type' => 'uri',
-                                    'label' => '美容の口コミ広場を見る',
-                                    'uri' => 'http://clinic.e-kuchikomi.info/'
-                                ]
-                            ]
-                        ],
-                        [
-                            'title' => 'カルーセル2',
-                            'text' => 'カルーセル2です',
-                            'actions' => [
-                                [
-                                    'type' => 'postback',
-                                    'label' => 'webhookにpost送信',
-                                    'data' => 'value'
-                                ],
-                                [
-                                    'type' => 'uri',
-                                    'label' => '女美会を見る',
-                                    'uri' => 'https://jobikai.com/'
-                                ]
-                            ]
-                        ],
-                    ]
-                ]
-            ];
-        }else {
-           
-            // // trả lời message hiện tại
-            $messageData = [
-                'type' => 'text',
-                'text' => $message->{"text"}
-            ];
 
-        }
+		if ($message->{"text"} == '予約' || $message->{"text"} == '予約する' ) {
+		            // 確認ダイアログタイプ
+		            $messageData = [
+		                'type' => 'template',
+		                'altText' => '予約',
+		                'template' => [
+		                    'type' => 'confirm',
+		                    'text' => '携帯番号を入力してください？',
+		                    'actions' => [
+		                        [
+		                            'type' => 'message',
+		                            'label' => '元気です',
+		                            'text' => '元気です'
+		                        ],
+		                        [
+		                            'type' => 'message',
+		                            'label' => 'まあまあです',
+		                            'text' => 'まあまあです'
+		                        ],
+		                    ]
+		                ]
+		            ];      
+		    }else {
+		           
+		    // // trả lời message hiện tại
+		    $messageData = [
+		        'type' => 'text',
+		        'text' => $message->{"text"}
+		    ];
+
+		}
+
+
+		 //Các loại phản hoài có nội dung
+        // if ($message->{"text"} == '確認') {
+        //     // 確認ダイアログタイプ
+        //     $messageData = [
+        //         'type' => 'template',
+        //         'altText' => '確認ダイアログ',
+        //         'template' => [
+        //             'type' => 'confirm',
+        //             'text' => '元気ですかー？',
+        //             'actions' => [
+        //                 [
+        //                     'type' => 'message',
+        //                     'label' => '元気です',
+        //                     'text' => '元気です'
+        //                 ],
+        //                 [
+        //                     'type' => 'message',
+        //                     'label' => 'まあまあです',
+        //                     'text' => 'まあまあです'
+        //                 ],
+        //             ]
+        //         ]
+        //     ];
+        // } elseif ($message->{"text"} == 'ボタン') {
+        //     // ボタンタイプ
+        //     $messageData = [
+        //         'type' => 'template',
+        //         'altText' => 'ボタン',
+        //         'template' => [
+        //             'type' => 'buttons',
+        //             'title' => 'タイトルです',
+        //             'text' => '選択してね',
+        //             'actions' => [
+        //                 [
+        //                     'type' => 'postback',
+        //                     'label' => 'webhookにpost送信',
+        //                     'data' => 'value'
+        //                 ],
+        //                 [
+        //                     'type' => 'uri',
+        //                     'label' => 'googleへ移動',
+        //                     'uri' => 'https://google.com'
+        //                 ]
+        //             ]
+        //         ]
+        //     ];
+        // } elseif ($message->{"text"} == 'カルーセル') {
+        //     // カルーセルタイプ
+        //     $messageData = [
+        //         'type' => 'template',
+        //         'altText' => 'カルーセル',
+        //         'template' => [
+        //             'type' => 'carousel',
+        //             'columns' => [
+        //                 [
+        //                     'title' => 'カルーセル1',
+        //                     'text' => 'カルーセル1です',
+        //                     'actions' => [
+        //                         [
+        //                             'type' => 'postback',
+        //                             'label' => 'webhookにpost送信',
+        //                             'data' => 'value'
+        //                         ],
+        //                         [
+        //                             'type' => 'uri',
+        //                             'label' => '美容の口コミ広場を見る',
+        //                             'uri' => 'http://clinic.e-kuchikomi.info/'
+        //                         ]
+        //                     ]
+        //                 ],
+        //                 [
+        //                     'title' => 'カルーセル2',
+        //                     'text' => 'カルーセル2です',
+        //                     'actions' => [
+        //                         [
+        //                             'type' => 'postback',
+        //                             'label' => 'webhookにpost送信',
+        //                             'data' => 'value'
+        //                         ],
+        //                         [
+        //                             'type' => 'uri',
+        //                             'label' => '女美会を見る',
+        //                             'uri' => 'https://jobikai.com/'
+        //                         ]
+        //                     ]
+        //                 ],
+        //             ]
+        //         ]
+        //     ];
+        // }else {
+           
+        //     // // trả lời message hiện tại
+        //     $messageData = [
+        //         'type' => 'text',
+        //         'text' => $message->{"text"}
+        //     ];
+        // }
 
 
 
