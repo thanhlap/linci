@@ -40,7 +40,7 @@ class Callback extends CI_Controller {
 		$this->load->model('Chat_log');
 		//kt userId hien tai
 		$lastMsg = $this->Chat_log->getLastMsgByUserID($source_user_id);
-		// $step = $lastMsg['step'];
+		$step = $lastMsg['step'];
 
 		$replyMsg = "";
 
@@ -60,7 +60,6 @@ class Callback extends CI_Controller {
 		// neu msg= "予約"" || msg= "予約する"" luu vao table chat_log
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
 			// $data_chat['step'] = 1;
-			$step = $data_chat['step'];
 			$this->Chat_log->insert($data_chat);
 			//hoi phone
 			$messageData = array(
