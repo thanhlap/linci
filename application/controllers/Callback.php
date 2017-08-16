@@ -93,37 +93,37 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						if ($message->{"text"} == '確認') {
-							$data_chat['step'] = 4;
-							$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
+						// if ($message->{"text"} == '確認') {
+						// 	$data_chat['step'] = 4;
+						// 	$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
 						
-						    // 確認ダイアログタイプ
-						    $messageData = [
-						        'type' => 'template',
-						        'altText' => '確認ダイアログ',
-						        'template' => [
-						            'type' => 'confirm',
-						            'text' => '元気ですかー？',
-						            'actions' => [
-						                [
-						                    'type' => 'message',
-						                    'label' => '元気です',
-						                    'text' => '元気です'
-						                ],
-						                [
-						                    'type' => 'message',
-						                    'label' => 'まあまあです',
-						                    'text' => 'まあまあです'
-						                ],
-						            ]
-						        ]
-						    ];
-						}else{
-							$messageData = array(
-								array('type' => 'text', 'text' => $message->{"text"}), 
-								array('type' => 'text', 'text' => 'step ' . $step)
-							);
-						}
+						//     // 確認ダイアログタイプ
+						//     $messageData = [
+						//         'type' => 'template',
+						//         'altText' => '確認ダイアログ',
+						//         'template' => [
+						//             'type' => 'confirm',
+						//             'text' => '元気ですかー？',
+						//             'actions' => [
+						//                 [
+						//                     'type' => 'message',
+						//                     'label' => '元気です',
+						//                     'text' => '元気です'
+						//                 ],
+						//                 [
+						//                     'type' => 'message',
+						//                     'label' => 'まあまあです',
+						//                     'text' => 'まあまあです'
+						//                 ],
+						//             ]
+						//         ]
+						//     ];
+						// }else{
+						// 	$messageData = array(
+						// 		array('type' => 'text', 'text' => $message->{"text"}), 
+						// 		array('type' => 'text', 'text' => 'step ' . $step)
+						// 	);
+						// }
 
 					}else{
 						$data_chat['step'] = 1;
