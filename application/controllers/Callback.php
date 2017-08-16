@@ -93,31 +93,15 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						if ($message->{"text"} == '確認') {
+
+						$list = $this->eyelash_api->list($lastMsg['message_ref'] ,$message->{"text"});
+						$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
+						if($list['list'] == "true"){
 							$data_chat['step'] = 4;
-							$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
-						
-						    // 確認ダイアログタイプ
-						    $messageData = array(
-						        'type' => 'template',
-						        'altText' => '確認ダイアログ',
-						        'template' => array(
-						            'type' => 'confirm',
-						            'text' => '元気ですかー？',
-						            'actions' => array(
-						                array(
-						                    'type' => 'message',
-						                    'label' => '元気です',
-						                    'text' => '元気です'
-						                ),
-						                array(
-						                    'type' => 'message',
-						                    'label' => 'まあまあです',
-						                    'text' => 'まあまあです'
-						                ),
-						            )
-						        )
-						    );
+							$messageData = array(
+								array('type' => 'text', 'text' => "xin chao"), 
+								array('type' => 'text', 'text' => 'step ' . $step)
+							);
 						}
 
 					}else{
