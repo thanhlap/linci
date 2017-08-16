@@ -6,12 +6,12 @@ class Callback extends CI_Controller {
 
 	public function index()
 	{
-		$accessToken = 'CCTtRhug6RnXVdzkA88/gSRGGs28FtVCLrU1J0kEHB9pbzTgjM+j4S33vpj0uG1yHpTP67spi9zuY3WZVuSQueHXmJztPhyziWO13It8T3N+lvO4XEamCez7HhW1VvLjdXkVLCFEcy9XetSieJ2+IQdB04t89/1O/w1cDnyilFU=';
+		// $accessToken = 'CCTtRhug6RnXVdzkA88/gSRGGs28FtVCLrU1J0kEHB9pbzTgjM+j4S33vpj0uG1yHpTP67spi9zuY3WZVuSQueHXmJztPhyziWO13It8T3N+lvO4XEamCez7HhW1VvLjdXkVLCFEcy9XetSieJ2+IQdB04t89/1O/w1cDnyilFU=';
 		
-		$jsonString = file_get_contents('php://input');
-		//$jsonString = '{"events":[{"type":"message","replyToken":"a0bd76fe7d50445cafa76229aeaeaec8","source":{"userId":"U2c424933e5678e93fc68a2f631bc2818","type":"user"},"timestamp":1502685265679,"message":{"type":"text","id":"6540861500362","text":"予約"}}]}';
-		error_log($jsonString);
-		$jsonObj = json_decode($jsonString);
+		// $jsonString = file_get_contents('php://input');
+		// //$jsonString = '{"events":[{"type":"message","replyToken":"a0bd76fe7d50445cafa76229aeaeaec8","source":{"userId":"U2c424933e5678e93fc68a2f631bc2818","type":"user"},"timestamp":1502685265679,"message":{"type":"text","id":"6540861500362","text":"予約"}}]}';
+		// error_log($jsonString);
+		// $jsonObj = json_decode($jsonString);
 
 
 		// //mang dlieu dc luu
@@ -24,10 +24,10 @@ class Callback extends CI_Controller {
 		// // 	"message":{"type":"text","id":"6550640608491","text":"予約"}}
 		// // ]}
 
-		$source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
-		$source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
-		$message = $jsonObj->{"events"}[0]->{"message"}; //vao mang message
-		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
+		// $source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
+		// $source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
+		// $message = $jsonObj->{"events"}[0]->{"message"}; //vao mang message
+		// $replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
 		
 		// //luu bang log
 		// $dataLog = array(
@@ -150,104 +150,113 @@ class Callback extends CI_Controller {
 		// }
 
 
+		$accessToken = 'CCTtRhug6RnXVdzkA88/gSRGGs28FtVCLrU1J0kEHB9pbzTgjM+j4S33vpj0uG1yHpTP67spi9zuY3WZVuSQueHXmJztPhyziWO13It8T3N+lvO4XEamCez7HhW1VvLjdXkVLCFEcy9XetSieJ2+IQdB04t89/1O/w1cDnyilFU=';
 		
-		
-		if ($message->{"text"} == '確認') {
-			// 確認ダイアログタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => '確認ダイアログ',
-					'template' => [
-							'type' => 'confirm',
-							'text' => '元気ですかー？',
-							'actions' => [
-									[
-											'type' => 'message',
-											'label' => '元気です',
-											'text' => '元気です'
-									],
-									[
-											'type' => 'message',
-											'label' => 'まあまあです',
-											'text' => 'まあまあです'
-									],
-							]
-					]
-			];
-		} elseif ($message->{"text"} == 'ボタン') {
-			// ボタンタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => 'ボタン',
-					'template' => [
-							'type' => 'buttons',
-							'title' => 'タイトルです',
-							'text' => '選択してね',
-							'actions' => [
-									[
-											'type' => 'postback',
-											'label' => 'webhookにpost送信',
-											'data' => 'value'
-									],
-									[
-											'type' => 'uri',
-											'label' => 'googleへ移動',
-											'uri' => 'https://google.com'
-									]
-							]
-					]
-			];
-		} elseif ($message->{"text"} == 'カルーセル') {
-			// カルーセルタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => 'カルーセル',
-					'template' => [
-							'type' => 'carousel',
-							'columns' => [
-									[
-											'title' => 'カルーセル1',
-											'text' => 'カルーセル1です',
-											'actions' => [
-													[
-															'type' => 'postback',
-															'label' => 'webhookにpost送信',
-															'data' => 'value'
-													],
-													[
-															'type' => 'uri',
-															'label' => '美容の口コミ広場を見る',
-															'uri' => 'http://clinic.e-kuchikomi.info/'
-													]
-											]
-									],
-									[
-											'title' => 'カルーセル2',
-											'text' => 'カルーセル2です',
-											'actions' => [
-													[
-															'type' => 'postback',
-															'label' => 'webhookにpost送信',
-															'data' => 'value'
-													],
-													[
-															'type' => 'uri',
-															'label' => '女美会を見る',
-															'uri' => 'https://jobikai.com/'
-													]
-											]
-									],
-							]
-					]
-			];
-		} else {
-			// それ以外は送られてきたテキストをオウム返し
-			$messageData = [
-					'type' => 'text',
-					'text' => $message->{"text"}
-			];
-		}
-		
+		$jsonString = file_get_contents('php://input');
+		error_log($jsonString);
+		$jsonObj = json_decode($jsonString);
+
+		$message = $jsonObj->{"events"}[0]->{"message"};
+		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"};
+
+		 //Các loại phản hoài có nội dung
+        if ($message->{"text"} == '確認') {
+            // 確認ダイアログタイプ
+            $messageData = [
+                'type' => 'template',
+                'altText' => '確認ダイアログ',
+                'template' => [
+                    'type' => 'confirm',
+                    'text' => '元気ですかー？',
+                    'actions' => [
+                        [
+                            'type' => 'message',
+                            'label' => '元気です',
+                            'text' => '元気です'
+                        ],
+                        [
+                            'type' => 'message',
+                            'label' => 'まあまあです',
+                            'text' => 'まあまあです'
+                        ],
+                    ]
+                ]
+            ];
+        } elseif ($message->{"text"} == 'ボタン') {
+            // ボタンタイプ
+            $messageData = [
+                'type' => 'template',
+                'altText' => 'ボタン',
+                'template' => [
+                    'type' => 'buttons',
+                    'title' => 'タイトルです',
+                    'text' => '選択してね',
+                    'actions' => [
+                        [
+                            'type' => 'postback',
+                            'label' => 'webhookにpost送信',
+                            'data' => 'value'
+                        ],
+                        [
+                            'type' => 'uri',
+                            'label' => 'googleへ移動',
+                            'uri' => 'https://google.com'
+                        ]
+                    ]
+                ]
+            ];
+        } elseif ($message->{"text"} == 'カルーセル') {
+            // カルーセルタイプ
+            $messageData = [
+                'type' => 'template',
+                'altText' => 'カルーセル',
+                'template' => [
+                    'type' => 'carousel',
+                    'columns' => [
+                        [
+                            'title' => 'カルーセル1',
+                            'text' => 'カルーセル1です',
+                            'actions' => [
+                                [
+                                    'type' => 'postback',
+                                    'label' => 'webhookにpost送信',
+                                    'data' => 'value'
+                                ],
+                                [
+                                    'type' => 'uri',
+                                    'label' => '美容の口コミ広場を見る',
+                                    'uri' => 'http://clinic.e-kuchikomi.info/'
+                                ]
+                            ]
+                        ],
+                        [
+                            'title' => 'カルーセル2',
+                            'text' => 'カルーセル2です',
+                            'actions' => [
+                                [
+                                    'type' => 'postback',
+                                    'label' => 'webhookにpost送信',
+                                    'data' => 'value'
+                                ],
+                                [
+                                    'type' => 'uri',
+                                    'label' => '女美会を見る',
+                                    'uri' => 'https://jobikai.com/'
+                                ]
+                            ]
+                        ],
+                    ]
+                ]
+            ];
+        }else {
+           
+            // // trả lời message hiện tại
+            $messageData = [
+                'type' => 'text',
+                'text' => $message->{"text"}
+            ];
+
+        }
 
 
 
