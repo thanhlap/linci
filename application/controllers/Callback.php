@@ -93,7 +93,7 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						if ($result['result'] == "true" && $message->{"text"} == '確認') {
+						if ($message->{"text"} == '確認') {
 							$data_chat['step'] = 4;
 							$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
 						
