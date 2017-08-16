@@ -101,7 +101,7 @@ class Callback extends CI_Controller {
 								array('type' => 'text', 'text' => $replyMsg), 
 								array('type' => 'text', 'text' => 'step ' . $step),
 
-								'template' => array('type' => 'buttons', 'actions' => array(
+								array('type' => 'buttons', 'actions' => array(
 											'type' => 'postback',
 											'label' => 'webhookにpost送信',
 											'data' => 'value'
@@ -110,8 +110,8 @@ class Callback extends CI_Controller {
 											'type' => 'uri',
 											'label' => 'googleへ移動',
 											'uri' => 'https://google.com'
-										);
-									);
+										)
+									)
 							);	
 							
 
