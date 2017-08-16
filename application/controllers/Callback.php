@@ -11,6 +11,7 @@ class Callback extends CI_Controller {
 		error_log($jsonString);
 		$jsonObj = json_decode($jsonString);
 
+
 		//mang dlieu dc luu
 		//{"events":[
 		// 	{
@@ -92,27 +93,7 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						// $messageData = array(
-						// 		        'type' => 'template',
-						// 		        'template' => array(
-						// 		            'type' => 'buttons',
-						// 		            'title' => 'タイトルです',
-						// 		            'text' => '選択してね',
-						// 		            'actions' => array(
-						// 		                array(
-						// 		                    'type' => 'postback',
-						// 		                    'label' => 'webhookにpost送信',
-						// 		                    'data' => 'value'
-						// 		                ),
-						// 		                array(
-						// 		                    'type' => 'uri',
-						// 		                    'label' => 'googleへ移動',
-						// 		                    'uri' => 'https://google.com'
-						// 		                )
-						// 		            )
-						// 		        )
-						// 		    );
-
+					
 					}else{
 						$data_chat['step'] = 1;
 						$replyMsg = 'Mobile number and password is not valid.';
