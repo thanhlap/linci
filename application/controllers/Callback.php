@@ -24,8 +24,8 @@ class Callback extends CI_Controller {
 		// 	"message":{"type":"text","id":"6550640608491","text":"予約"}}
 		// ]}
 
-		$source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
-		$source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
+		// $source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
+		// $source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
 		$message = $jsonObj->{"events"}[0]->{"message"}; //vao mang message
 		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
 		
@@ -152,109 +152,108 @@ class Callback extends CI_Controller {
 
 
 
-		
-		if ($message->{"text"} == '確認') {
-			// 確認ダイアログタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => '確認ダイアログ',
-					'template' => [
-							'type' => 'confirm',
-							'text' => '元気ですかー？',
-							'actions' => [
-									[
-											'type' => 'message',
-											'label' => '元気です',
-											'text' => '元気です'
-									],
-									[
-											'type' => 'message',
-											'label' => 'まあまあです',
-											'text' => 'まあまあです'
-									],
-							]
-					]
-			];
-		} elseif ($message->{"text"} == 'ボタン') {
-			// ボタンタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => 'ボタン',
-					'template' => [
-							'type' => 'buttons',
-							'title' => 'タイトルです',
-							'text' => '選択してね',
-							'actions' => [
-									[
-											'type' => 'postback',
-											'label' => 'webhookにpost送信',
-											'data' => 'value'
-									],
-									[
-											'type' => 'uri',
-											'label' => 'googleへ移動',
-											'uri' => 'https://google.com'
-									]
-							]
-					]
-			];
-		} elseif ($message->{"text"} == 'カルーセル') {
-			// カルーセルタイプ
-			$messageData = [
-					'type' => 'template',
-					'altText' => 'カルーセル',
-					'template' => [
-							'type' => 'carousel',
-							'columns' => [
-									[
-											'title' => 'カルーセル1',
-											'text' => 'カルーセル1です',
-											'actions' => [
-													[
-															'type' => 'postback',
-															'label' => 'webhookにpost送信',
-															'data' => 'value'
-													],
-													[
-															'type' => 'uri',
-															'label' => '美容の口コミ広場を見る',
-															'uri' => 'http://clinic.e-kuchikomi.info/'
-													]
-											]
-									],
-									[
-											'title' => 'カルーセル2',
-											'text' => 'カルーセル2です',
-											'actions' => [
-													[
-															'type' => 'postback',
-															'label' => 'webhookにpost送信',
-															'data' => 'value'
-													],
-													[
-															'type' => 'uri',
-															'label' => '女美会を見る',
-															'uri' => 'https://jobikai.com/'
-													]
-											]
-									],
-							]
-					]
-			];
-		} else {
-			// それ以外は送られてきたテキストをオウム返し
-			$messageData = [
-					'type' => 'text',
-					'text' => $message->{"text"}
-			];
-		}
-		
+
+if ($message->{"text"} == '確認') {
+    // 確認ダイアログタイプ
+    $messageData = [
+        'type' => 'template',
+        'altText' => '確認ダイアログ',
+        'template' => [
+            'type' => 'confirm',
+            'text' => '元気ですかー？',
+            'actions' => [
+                [
+                    'type' => 'message',
+                    'label' => '元気です',
+                    'text' => '元気です'
+                ],
+                [
+                    'type' => 'message',
+                    'label' => 'まあまあです',
+                    'text' => 'まあまあです'
+                ],
+            ]
+        ]
+    ];
+} elseif ($message->{"text"} == 'ボタン') {
+    // ボタンタイプ
+    $messageData = [
+        'type' => 'template',
+        'altText' => 'ボタン',
+        'template' => [
+            'type' => 'buttons',
+            'title' => 'タイトルです',
+            'text' => '選択してね',
+            'actions' => [
+                [
+                    'type' => 'postback',
+                    'label' => 'webhookにpost送信',
+                    'data' => 'value'
+                ],
+                [
+                    'type' => 'uri',
+                    'label' => 'googleへ移動',
+                    'uri' => 'https://google.com'
+                ]
+            ]
+        ]
+    ];
+} elseif ($message->{"text"} == 'カルーセル') {
+    // カルーセルタイプ
+    $messageData = [
+        'type' => 'template',
+        'altText' => 'カルーセル',
+        'template' => [
+            'type' => 'carousel',
+            'columns' => [
+                [
+                    'title' => 'カルーセル1',
+                    'text' => 'カルーセル1です',
+                    'actions' => [
+                        [
+                            'type' => 'postback',
+                            'label' => 'webhookにpost送信',
+                            'data' => 'value'
+                        ],
+                        [
+                            'type' => 'uri',
+                            'label' => '美容の口コミ広場を見る',
+                            'uri' => 'http://clinic.e-kuchikomi.info/'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => 'カルーセル2',
+                    'text' => 'カルーセル2です',
+                    'actions' => [
+                        [
+                            'type' => 'postback',
+                            'label' => 'webhookにpost送信',
+                            'data' => 'value'
+                        ],
+                        [
+                            'type' => 'uri',
+                            'label' => '女美会を見る',
+                            'uri' => 'https://jobikai.com/'
+                        ]
+                    ]
+                ],
+            ]
+        ]
+    ];
+} else {
+    // それ以外は送られてきたテキストをオウム返し
+    $messageData = [
+        'type' => 'text',
+        'text' => $message->{"text"}
+    ];
+}
 
 
 
 		$response = [
 				'replyToken' => $replyToken,
-				'messages' => $messageData
+				'messages' => [$messageData] //$messageData
 				//'messages' => [$messageData, array('type' => 'step', 'text' => $step)]
 				//'messages' => array(array('type' => 'text', 'text' => "qw"), array('type' => 'text', 'text' => '1234'))
 		];
