@@ -98,26 +98,26 @@ class Callback extends CI_Controller {
 							$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
 						
 						    // 確認ダイアログタイプ
-						    $messageData = [
+						    $messageData = array(
 						        'type' => 'template',
 						        'altText' => '確認ダイアログ',
-						        'template' => [
+						        'template' => array(
 						            'type' => 'confirm',
 						            'text' => '元気ですかー？',
-						            'actions' => [
-						                [
+						            'actions' => array(
+						                array(
 						                    'type' => 'message',
 						                    'label' => '元気です',
 						                    'text' => '元気です'
-						                ],
-						                [
+						                ),
+						                array(
 						                    'type' => 'message',
 						                    'label' => 'まあまあです',
 						                    'text' => 'まあまあです'
-						                ],
-						            ]
-						        ]
-						    ];
+						                ),
+						            )
+						        )
+						    );
 						}
 
 					}else{
