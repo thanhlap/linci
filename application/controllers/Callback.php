@@ -6,12 +6,12 @@ class Callback extends CI_Controller {
 
 	public function index()
 	{
-		// $accessToken = 'CCTtRhug6RnXVdzkA88/gSRGGs28FtVCLrU1J0kEHB9pbzTgjM+j4S33vpj0uG1yHpTP67spi9zuY3WZVuSQueHXmJztPhyziWO13It8T3N+lvO4XEamCez7HhW1VvLjdXkVLCFEcy9XetSieJ2+IQdB04t89/1O/w1cDnyilFU=';
+		$accessToken = 'CCTtRhug6RnXVdzkA88/gSRGGs28FtVCLrU1J0kEHB9pbzTgjM+j4S33vpj0uG1yHpTP67spi9zuY3WZVuSQueHXmJztPhyziWO13It8T3N+lvO4XEamCez7HhW1VvLjdXkVLCFEcy9XetSieJ2+IQdB04t89/1O/w1cDnyilFU=';
 		
-		// $jsonString = file_get_contents('php://input');
-		// //$jsonString = '{"events":[{"type":"message","replyToken":"a0bd76fe7d50445cafa76229aeaeaec8","source":{"userId":"U2c424933e5678e93fc68a2f631bc2818","type":"user"},"timestamp":1502685265679,"message":{"type":"text","id":"6540861500362","text":"予約"}}]}';
-		// error_log($jsonString);
-		// $jsonObj = json_decode($jsonString);
+		$jsonString = file_get_contents('php://input');
+		//$jsonString = '{"events":[{"type":"message","replyToken":"a0bd76fe7d50445cafa76229aeaeaec8","source":{"userId":"U2c424933e5678e93fc68a2f631bc2818","type":"user"},"timestamp":1502685265679,"message":{"type":"text","id":"6540861500362","text":"予約"}}]}';
+		error_log($jsonString);
+		$jsonObj = json_decode($jsonString);
 
 
 		// //mang dlieu dc luu
@@ -24,10 +24,10 @@ class Callback extends CI_Controller {
 		// // 	"message":{"type":"text","id":"6550640608491","text":"予約"}}
 		// // ]}
 
-		// $source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
-		// $source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
-		// $message = $jsonObj->{"events"}[0]->{"message"}; //vao mang message
-		// $replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
+		$source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
+		$source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
+		$message = $jsonObj->{"events"}[0]->{"message"}; //vao mang message
+		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
 		
 		// //luu bang log
 		// $dataLog = array(
