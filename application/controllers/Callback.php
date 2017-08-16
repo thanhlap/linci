@@ -107,6 +107,7 @@ class Callback extends CI_Controller {
 					
 					break;
 				case 3:
+				    $this->load->library('eyelash_api');
 					$list = $this->eyelash_api->list($lastMsg['message_ref'], $message->{"text"});
 					$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
 					if ($list['list'] == "true"){
