@@ -95,29 +95,28 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step)
 						);
-						// if ($data_chat['step'] == 3 && $message->{"text"} == '確認') {
-						// 	// 確認ダイアログタイプ
-						// 	$messageData = [
-						// 			'type' => 'template',
-						// 			'altText' => '確認ダイアログ',
-						// 			'template' => [
-						// 					'type' => 'confirm',
-						// 					'text' => '元気ですかー？',
-						// 					'actions' => [
-						// 							[
-						// 									'type' => 'message',
-						// 									'label' => '元気です',
-						// 									'text' => '元気です'
-						// 							],
-						// 							[
-						// 									'type' => 'message',
-						// 									'label' => 'まあまあです',
-						// 									'text' => 'まあまあです'
-						// 							],
-						// 					]
-						// 			]
-						// 	];
-						// }
+						if ($result['result'] == "true" && $message->{"text"} == '確認') {
+							$messageData = [
+									'type' => 'template',
+									'altText' => '確認ダイアログ',
+									'template' => [
+											'type' => 'confirm',
+											'text' => '元気ですかー？',
+											'actions' => [
+													[
+															'type' => 'message',
+															'label' => '元気です',
+															'text' => '元気です'
+													],
+													[
+															'type' => 'message',
+															'label' => 'まあまあです',
+															'text' => 'まあまあです'
+													],
+											]
+									]
+							];
+						}
 
 					}else{
 						$data_chat['step'] = 1;
