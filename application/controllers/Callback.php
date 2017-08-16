@@ -59,12 +59,12 @@ class Callback extends CI_Controller {
 		
 		// neu msg= "予約"" || msg= "予約する"" luu vao table chat_log
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
-			// $data_chat['step'] = 1;
+			$data_chat['step'] = 1;
 			$this->Chat_log->insert($data_chat);
 			//hoi phone
 			$messageData = array(
 				array('type' => 'text', 'text' => "携帯番号を入力してください。?"), 
-				// array('type' => 'text', 'text' => 'start')
+				array('type' => 'text', 'text' => 'start')
 			);
 			
 		} else{
@@ -76,7 +76,7 @@ class Callback extends CI_Controller {
 
 					$messageData = array(
 						array('type' => 'text', 'text' => $replyMsg),
-						// array('type' => 'text', 'text' => 'step ' . $step)
+						array('type' => 'text', 'text' => 'step ' . $step)
 					);
 					
 					break;
@@ -91,7 +91,7 @@ class Callback extends CI_Controller {
 						$replyMsg = '店舗を入力してください。';
 						$messageData = array(
 							array('type' => 'text', 'text' => $replyMsg), 
-							// array('type' => 'text', 'text' => 'step ' . $step)
+							array('type' => 'text', 'text' => 'step ' . $step)
 						);
 						
 					}else{
