@@ -13,14 +13,6 @@ class Callback extends CI_Controller {
 		error_log($jsonString);
 		$jsonObj = json_decode($jsonString);
 
-		//luu bang log
-		$dataLog = array(
-				'key_name' => 'jsonString',
-				'key_value' => $jsonString
-		);
-
-		$this->load->model('Log_model');
-		$this->Log_model->insert($dataLog);
 
 //mang dlieu dc luu
 //{"events":[
@@ -37,6 +29,16 @@ class Callback extends CI_Controller {
 		$message = $jsonObj->{"events"}[0]->{"message"}; //vao mang message
 		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
 		
+		//luu bang log
+		$dataLog = array(
+				'key_name' => 'jsonString',
+				'key_value' => $jsonString
+		);
+
+		$this->load->model('Log_model');
+		$this->Log_model->insert($dataLog);
+
+
 		$this->load->model('Chat_log');
 		//kt userId hien tai
 		$lastMsg = $this->Chat_log->getLastMsgByUserID($source_user_id);
