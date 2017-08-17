@@ -131,7 +131,7 @@ class Callback extends CI_Controller {
 							$data_chat['step'] = 4;
 							// $this->load->library('eyelash_api');
 							// $result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
-							// $data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
+							$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
 
 							// $replyMsg = 'test';
 							$messageData = array(
