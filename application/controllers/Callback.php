@@ -127,7 +127,7 @@ class Callback extends CI_Controller {
 					break;
 
 				case 3:
-						if($replyMsg == '店舗を入力してください。'){
+						if($message->{"text"} == '店舗を入力してください。'){
 							$data_chat['step'] = 4;
 							// $replyMsg = 'test';
 							$messageData = array(
@@ -138,7 +138,7 @@ class Callback extends CI_Controller {
 										  //	"altText"=> "this is a buttons template",
 										  	"template"=> array(
 										      	"type"=> "buttons",
-										      	"thumbnailImageUrl"=> "https://example.com/bot/images/image.jpg",
+										      	// "thumbnailImageUrl"=> "https://example.com/bot/images/image.jpg",
 										      	// "title"=> "Menu",
 										      	// "text"=> "Please select",
 										      	"actions"=> array(
