@@ -107,7 +107,7 @@ class Callback extends CI_Controller {
 					break;
 
 				case 3:
-						if(($result['result'] == "true") && $message->{"text"} == '確認'){
+						if($message->{"text"} == '確認'){
 							$data_chat['step'] = 4;
 							// $this->load->library('eyelash_api');
 							// $result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
