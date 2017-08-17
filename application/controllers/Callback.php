@@ -127,7 +127,7 @@ class Callback extends CI_Controller {
 					break;
 
 				case 3:
-						if($message->{"text"} == '店舗を入力してください。'){
+						if($message->{"text"} == '確認'){
 							$data_chat['step'] = 4;
 							// $replyMsg = 'test';
 							$messageData = array(
@@ -142,16 +142,16 @@ class Callback extends CI_Controller {
 										      	// "title"=> "Menu",
 										      	// "text"=> "Please select",
 										      	"actions"=> array(
-											          array(
-											            "type"=> "postback",
-											            "label"=> "Buy",
-											            "data"=> "action=buy&itemid=123"
-											          ),
-											          array(
-											            "type"=> "postback",
-											            "label"=> "Add to cart",
-											            "data"=> "action=add&itemid=123"
-											          ),
+											          // array(
+											          //   "type"=> "postback",
+											          //   "label"=> "Buy",
+											          //   "data"=> "action=buy&itemid=123"
+											          // ),
+											          // array(
+											          //   "type"=> "postback",
+											          //   "label"=> "Add to cart",
+											          //   "data"=> "action=add&itemid=123"
+											          // ),
 											          array(
 											            "type"=> "uri",
 											            "label"=> "View detail",
