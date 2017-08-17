@@ -162,28 +162,28 @@ class Callback extends CI_Controller {
 								  //     "height"=> 1040,
 								  //     "width"=> 1040
 								  // ),
-								  "actions"=> array(
-								      array(
-								          "type"=> "uri",
-								          "linkUri"=> "https://example.com/",
-								          "area"=> array(
-								              "x"=> 0,
-								              "y"=> 0,
-								              "width"=> 520,
-								              "height"=> 1040
-								          )
-								      ),
-								      // array(
-								      //     "type"=> "message",
-								      //     "text"=> "hello",
-								      //     "area"=> array(
-								      //         "x"=> 520,
-								      //         "y"=> 0,
-								      //         "width"=> 520,
-								      //         "height"=> 1040
-								      //     )
-								      // )
-								  )
+								  	"actions"=> array(
+									    array(
+									          "type"=> "uri",
+									          "linkUri"=> "https://example.com/",
+									          // "area"=> array(
+									          //     "x"=> 0,
+									          //     "y"=> 0,
+									          //     "width"=> 520,
+									          //     "height"=> 1040
+									          // )
+									      	),
+										      // array(
+										      //     "type"=> "message",
+										      //     "text"=> "hello",
+										      //     "area"=> array(
+										      //         "x"=> 520,
+										      //         "y"=> 0,
+										      //         "width"=> 520,
+										      //         "height"=> 1040
+										      //     )
+										      // )
+								  	)
 								)
 								// array(
 							 //            	"type"=> "template",
