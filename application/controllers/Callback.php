@@ -130,12 +130,12 @@ class Callback extends CI_Controller {
 						$data_chat['step'] = 4;
 						$replyMsg = 'test';
 						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg), 
+							//array('type' => 'text', 'text' => $replyMsg), 
 							array('type' => 'text', 'text' => 'step ' . $step),
 							array(
 						            'type' => 'buttons',
 						            'title' => 'test',
-						            'text' => 'test',
+						            'text' => $replyMsg,
 						            'actions' => array(
 						                array(
 						                    'type' => 'postback',
