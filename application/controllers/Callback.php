@@ -89,10 +89,20 @@ class Callback extends CI_Controller {
 					if ($result['result'] == "true"){
 						$data_chat['step'] = 3;
 						$replyMsg = '店舗を入力してください。';
+
+						$data_chat['message_ref'] = $message->{"text"};
+						
+						$list = $this->eyelash_api->list($lastMsg['message_ref'], $message->{"text"});
 						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg), 
-							array('type' => 'text', 'text' => 'step ' . $step)
+							array('type' => 'text', 'text' => "danh dach cua hang")
+
 						);
+
+						foreach ($list as $key => $value) {
+							$messageData[] = array('type' => 'text', 'text' => $value);
+						}
+
+						
 						
 					}else{
 						$data_chat['step'] = 1;
@@ -106,40 +116,40 @@ class Callback extends CI_Controller {
 					}
 					break;
 
-				case 3:
-						if($message->{"text"} == '確認'){
-							$data_chat['step'] = 4;
+				// case 3:
+				// 		if($message->{"text"} == '確認'){
+				// 			$data_chat['step'] = 4;
 			
-							// $replyMsg = 'test';
-							$messageData = array(
-								//array('type' => 'text', 'text' => $replyMsg), 
-								array('type' => 'text', 'text' => 'step ' . $step),
-								array(
-									 	"type"=> "video",
-									    "originalContentUrl"=> "https://example.com/original.mp4",
-									    "previewImageUrl"=> "https://example.com/preview.jpg"
-								),
-								array(
-										"type"=> "audio",
-									    "originalContentUrl"=> "https://example.com/original.m4a",
-									    "duration"=> 240000
-								),
-								array(
-										"type"=> "location",
-									    "title"=> "my location",
-									    "address"=> "〒150-0002 東京都渋谷区渋谷２丁目２１−１",
-									    "latitude"=> "35.65910807942215",
-									    "longitude"=> "139.70372892916203"
-								),
-								// array(								
-								//   	"type"=> "template",
-								//     "altText"=> "this is a buttons template",
+				// 			// $replyMsg = 'test';
+				// 			$messageData = array(
+				// 				//array('type' => 'text', 'text' => $replyMsg), 
+				// 				array('type' => 'text', 'text' => 'step ' . $step),
+				// 				array(
+				// 					 	"type"=> "video",
+				// 					    "originalContentUrl"=> "https://example.com/original.mp4",
+				// 					    "previewImageUrl"=> "https://example.com/preview.jpg"
+				// 				),
+				// 				array(
+				// 						"type"=> "audio",
+				// 					    "originalContentUrl"=> "https://example.com/original.m4a",
+				// 					    "duration"=> 240000
+				// 				),
+				// 				array(
+				// 						"type"=> "location",
+				// 					    "title"=> "my location",
+				// 					    "address"=> "〒150-0002 東京都渋谷区渋谷２丁目２１−１",
+				// 					    "latitude"=> "35.65910807942215",
+				// 					    "longitude"=> "139.70372892916203"
+				// 				),
+				// 				// array(								
+				// 				//   	"type"=> "template",
+				// 				//     "altText"=> "this is a buttons template",
 								 
-								// ),
+				// 				// ),
 							
-							);
-						}
-					break;
+				// 			);
+				// 		}
+				// 	break;
 				
 					 	
 									
