@@ -140,7 +140,7 @@ class Callback extends CI_Controller {
 									      "thumbnailImageUrl"=> "https://example.com/bot/images/image.jpg",
 									      "title"=> "Menu",
 									      "text"=> "Please select",
-									      "actions"=> [
+									      "actions"=> array(
 									          {
 									            "type"=> "postback",
 									            "label"=> "Buy",
@@ -156,7 +156,7 @@ class Callback extends CI_Controller {
 									            "label"=> "View detail",
 									            "uri"=> "http://example.com/page/123"
 									          }
-									      ]
+									      )
 									  }
 						        )
 						);
