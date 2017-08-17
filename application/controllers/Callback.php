@@ -124,7 +124,15 @@ class Callback extends CI_Controller {
 						);
 						
 					}
-					
+					break;
+
+				case 3:
+						$data_chat['step'] = 4;
+						$replyMsg = 'test';
+						$messageData = array(
+							array('type' => 'text', 'text' => $replyMsg), 
+							array('type' => 'text', 'text' => 'step ' . $step)
+						);
 					break;
 				
 					 	
