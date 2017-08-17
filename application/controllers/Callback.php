@@ -148,6 +148,7 @@ class Callback extends CI_Controller {
 						                    'uri' => 'https://google.com'
 						                )
 						            )
+						        )
 						);
 					break;
 				
