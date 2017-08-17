@@ -131,11 +131,11 @@ class Callback extends CI_Controller {
 									    "latitude"=> "35.65910807942215",
 									    "longitude"=> "139.70372892916203"
 								),
-								array(								
-								  	"type"=> "template",
-								    "altText"=> "this is a buttons template",
+								// array(								
+								//   	"type"=> "template",
+								//     "altText"=> "this is a buttons template",
 								 
-								),
+								// ),
 							
 							);
 						}
