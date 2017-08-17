@@ -154,13 +154,13 @@ class Callback extends CI_Controller {
 									    "latitude"=> "35.65910807942215",
 									    "longitude"=> "139.70372892916203"
 								),
-								array(								
-								  	"type"=> "buttons",
-								   	"thumbnailImageUrl"=> "https://example.com/bot/images/image.jpg",
-							      	"title"=> "Menu",
-							      	"text"=> "Please select",
+								// array(								
+								//   	"type"=> "buttons",
+								//    	"thumbnailImageUrl"=> "https://example.com/bot/images/image.jpg",
+							 //      	"title"=> "Menu",
+							 //      	"text"=> "Please select",
 								 
-								)
+								// )
 							
 							);
 						}
