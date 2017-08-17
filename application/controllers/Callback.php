@@ -129,15 +129,26 @@ class Callback extends CI_Controller {
 				case 3:
 						if($message->{"text"} == '確認'){
 							$data_chat['step'] = 4;
+							$this->load->library('eyelash_api');
+							$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
+							$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
+
 							// $replyMsg = 'test';
 							$messageData = array(
 								//array('type' => 'text', 'text' => $replyMsg), 
 								array('type' => 'text', 'text' => 'step ' . $step),
 								array(
 									 	"type"=> "video",
-									    "originalContentUrl"=> "https://example.com/original.mp4",
+									    "originalContentUrl"=> "https://www.youtube.com/watch?v=tXvXCDMbugg",
 									    "previewImageUrl"=> "https://example.com/preview.jpg"
-								)
+								),
+								array(
+										"type"=> "location",
+									    "title"=> "my location",
+									    "address"=> "〒150-0002 東京都渋谷区渋谷２丁目２１−１",
+									    "latitude"=> 35.65910807942215,
+									    "longitude"=> 139.70372892916203
+								);
 								// array(
 							 //            	"type"=> "template",
 								// 		  //	"altText"=> "this is a buttons template",
