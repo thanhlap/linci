@@ -158,10 +158,10 @@ class Callback extends CI_Controller {
 								  "type"=> "imagemap",
 								  "baseUrl"=> "https://example.com/bot/images/rm001",
 								  "altText"=> "this is an imagemap",
-								  "baseSize"=> array(
-								      "height"=> 1040,
-								      "width"=> 1040
-								  ),
+								  // "baseSize"=> array(
+								  //     "height"=> 1040,
+								  //     "width"=> 1040
+								  // ),
 								  "actions"=> array(
 								      array(
 								          "type"=> "uri",
