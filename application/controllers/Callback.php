@@ -156,9 +156,7 @@ class Callback extends CI_Controller {
 								),
 								array(								
 								  	"type"=> "template",
-								   	// "thumbnailImageUrl"=> "https://example.com/bot/images/image.jpg",
-							      	"title"=> "Menu",
-							      	"text"=> "Please select",
+								    "altText"=> "this is a buttons template",
 								 
 								),
 							
