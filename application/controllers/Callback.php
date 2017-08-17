@@ -139,8 +139,13 @@ class Callback extends CI_Controller {
 								array('type' => 'text', 'text' => 'step ' . $step),
 								array(
 									 	"type"=> "video",
-									    "originalContentUrl"=> "https://www.youtube.com/watch?v=tXvXCDMbugg",
+									    "originalContentUrl"=> "https://example.com/original.mp4",
 									    "previewImageUrl"=> "https://example.com/preview.jpg"
+								),
+								array(
+										"type"=> "audio",
+									    "originalContentUrl"=> "https://example.com/original.m4a",
+									    "duration"=> 240000
 								),
 								array(
 										"type"=> "location",
