@@ -131,7 +131,23 @@ class Callback extends CI_Controller {
 						$replyMsg = 'test';
 						$messageData = array(
 							array('type' => 'text', 'text' => $replyMsg), 
-							array('type' => 'text', 'text' => 'step ' . $step)
+							array('type' => 'text', 'text' => 'step ' . $step),
+							array(
+						            'type' => 'buttons',
+						            'title' => 'test',
+						            'text' => 'test',
+						            'actions' => array(
+						                array(
+						                    'type' => 'postback',
+						                    'label' => 'webhookにpost送信',
+						                    'data' => 'value'
+						                ),
+						                array(
+						                    'type' => 'uri',
+						                    'label' => 'googleへ移動',
+						                    'uri' => 'https://google.com'
+						                )
+						            )
 						);
 					break;
 				
