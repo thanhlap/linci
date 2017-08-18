@@ -125,9 +125,7 @@ class Callback extends CI_Controller {
 							$messageData = array(
 								array('type' => 'text', 'text' => $replyMsg),
 								array('type' => 'text', 'text' => '携帯番号を入力してください。'));
-							$this->db->delete('chat_log');
-							$this->db->delete('log');
-							$this->db->delete('order_info');
+							$this->delete();
 						}
 					break;
 
@@ -284,10 +282,7 @@ class Callback extends CI_Controller {
 							array('type' => 'text', 'text' => 'step ' . $step),
 							array('type' => 'text', 'text' => $lastOrder['store_id'])
 						);
-						$this->db->delete('chat_log');
-						$this->db->delete('log');
-						$this->db->delete('order_info');
-
+						
 				}// switch ($step){ END
 				if($orderUpdate)
 					$this->Order_info->update($lastOrder);
@@ -326,6 +321,15 @@ class Callback extends CI_Controller {
 		}
 	}
 	
+
+	function delete(){
+		$this->db->delete('chat_log');
+		$this->db->delete('log');
+		$this->db->delete('order_info');
+
+	}
+
+
 	function saveLog($key, $value){
 		$errorLog = array(
 				'key_name' => $key,
