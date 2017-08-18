@@ -127,7 +127,7 @@ class Callback extends CI_Controller {
 								array('type' => 'text', 'text' => '携帯番号を入力してください。'));
 						}
 					break;
-					
+
 					case 3:
 						$replyMsg = '店舗を入力してください。';
 						$listStores = 'Have not any store.';
@@ -201,7 +201,7 @@ class Callback extends CI_Controller {
 	// 					}
 	// 				break;
 
-					case 5:
+					case 4:
 						if ($message_type == 'message'){
 							$listStaffs = 'Have not any staff.';
 							if($lastOrder['store_id'] && $lastOrder['store_id'] != ''){
