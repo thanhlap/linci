@@ -185,8 +185,9 @@ class Callback extends CI_Controller {
 						}
 					
 					break;
-					
+
 					case 4:
+					//lấy $store_id cửa hàng đó luu vào order_info
 						if ($message_type == 'postback'){
 							$data_chat['step'] = 5;
 							$data_chat['message_ref'] = $store_id;
@@ -270,7 +271,11 @@ class Callback extends CI_Controller {
 					default:
 						$orderUpdate = false;
 						$replyMsg = $message->{"text"};
-						$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => 'step ' . $step));
+						$messageData = array(
+							array('type' => 'text', 'text' => $replyMsg),
+							array('type' => 'text', 'text' => 'step ' . $step),
+							array('type' => 'text', 'text' => 'step ' . $store_id)
+						);
 				}// switch ($step){ END
 				if($orderUpdate)
 					$this->Order_info->update($lastOrder);
