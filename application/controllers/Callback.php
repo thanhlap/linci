@@ -127,139 +127,145 @@ class Callback extends CI_Controller {
 								array('type' => 'text', 'text' => '携帯番号を入力してください。'));
 						}
 					break;
-					case 3:
-						$replyMsg = '店舗を入力してください。';
-						$listStores = 'Have not any store.';
-						$results = $this->eyelash_api->listStore();
-						if ($results != null){
-							$stores = $results["response"]["Items"]["Item"];
-							if(($stores != NULL) && (count($stores) > 0)){
-								$arrStores = array();
-								$listStores = '';
-								foreach ($stores as $store){
-									if (strpos($store['store_name'], $message_text) !== false) {
-										$arrStores[] = $store;
-										if ($listStores != '')
-											$listStores .= $store['store_name'];
-											$listStores .= "\n\n";
-									}
-								}
-								//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
-								if (count($arrStores) > 4){
-									$data_chat['step'] = 3;
-									$lastOrder['step'] = 3;
-									$messageData = array(
-										array('type' => 'text', 'text' => $replyMsg), 
-										array('type' => 'text', 'text' => $listStores));
-								}else{
-									$data_chat['step'] = 4;
-									$lastOrder['step'] = 4;
-									$arrActions = array();
-									for ($i = 0; $i < count($arrStores); $i++){
-										$action = array();
-										$action['type'] = 'postback';
-										$action['label'] = $arrStores[$i]['store_name'];
-										$action['data'] = 'key=store&value=' . $arrStores[$i]['store_id'];
-										//$action['data'] = $arrStores[$i]['store_id'];
-										$action['text'] = $arrStores[$i]['store_name'];
-										$arrActions[] = $action;
-									}
-									//ボタンタイプ
-									$messageData = [array(
-											'type' => 'template',
-											'altText' => $replyMsg,
-											'template' => array(
-													'type' => 'buttons',
-													'title' => '店舗',
-													'text' => '選択してね',
-													'actions' => $arrActions
-											)
-									)];
-								}
-							}
-						}else{
-							$messageData = array(
-								array('type' => 'text', 'text' => $replyMsg),
-								array('type' => 'text', 'text' => $listStores));
-						}
 					
-					break;
-					case 4:
-						if ($message_type == 'postback'){
-							$data_chat['step'] = 5;
-							$data_chat['message_ref'] = $store_id;
-	// 						$store_id = $jsonObj->{"events"}[0]->{"postback"};
-	// 						$store_id = $store_id->{"data"};
-							$dataPB = $jsonObj->{"events"}[0]->{"postback"};
-							$dataPB = $dataPB->{"data"};
-							//$this->saveLog("dataPB", $dataPB);
-							parse_str($dataPB, $postbackData);
-							//$this->saveLog("store_id", $postbackData['value']);
-							$lastOrder['step'] = 5;
-							$lastOrder['store_id'] = $postbackData['value'];
-						}
-					break;
-					case 5:
-						if ($message_type == 'message'){
-							$listStaffs = 'Have not any staff.';
-							if($lastOrder['store_id'] && $lastOrder['store_id'] != ''){
-								$data_chat['step'] = 6;
-								$lastOrder['step'] = 6;
-								$replyMsg = '担当者を入力してください。';
-								$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
-								if ($results != null){
-									$staffs = $results["response"]["Items"]["Item"];
-									$arrStaffs = $this->filterStaffs($staffs);
-									if (count($arrStaffs) > 0)
-										$listStaffs = implode("\n", $arrStaffs);
-								}
-							}
-							$messageData = array(
-								array('type' => 'text', 'text' => $replyMsg), 
-								array('type' => 'text', 'text' => $listStaffs));
-						}
+	// 				case 3:
+	// 					$replyMsg = '店舗を入力してください。';
+	// 					$listStores = 'Have not any store.';
+	// 					$results = $this->eyelash_api->listStore();
+	// 					if ($results != null){
+	// 						$stores = $results["response"]["Items"]["Item"];
+	// 						if(($stores != NULL) && (count($stores) > 0)){
+	// 							$arrStores = array();
+	// 							$listStores = '';
+	// 							foreach ($stores as $store){
+	// 								if (strpos($store['store_name'], $message_text) !== false) {
+	// 									$arrStores[] = $store;
+	// 									if ($listStores != '')
+	// 										$listStores .= $store['store_name'];
+	// 										$listStores .= "\n\n";
+	// 								}
+	// 							}
+	// 							//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
+	// 							if (count($arrStores) > 4){
+	// 								$data_chat['step'] = 3;
+	// 								$lastOrder['step'] = 3;
+	// 								$messageData = array(
+	// 									array('type' => 'text', 'text' => $replyMsg), 
+	// 									array('type' => 'text', 'text' => $listStores));
+	// 							}else{
+	// 								$data_chat['step'] = 4;
+	// 								$lastOrder['step'] = 4;
+	// 								$arrActions = array();
+	// 								for ($i = 0; $i < count($arrStores); $i++){
+	// 									$action = array();
+	// 									$action['type'] = 'postback';
+	// 									$action['label'] = $arrStores[$i]['store_name'];
+	// 									$action['data'] = 'key=store&value=' . $arrStores[$i]['store_id'];
+	// 									//$action['data'] = $arrStores[$i]['store_id'];
+	// 									$action['text'] = $arrStores[$i]['store_name'];
+	// 									$arrActions[] = $action;
+	// 								}
+	// 								//ボタンタイプ
+	// 								$messageData = [array(
+	// 										'type' => 'template',
+	// 										'altText' => $replyMsg,
+	// 										'template' => array(
+	// 												'type' => 'buttons',
+	// 												'title' => '店舗',
+	// 												'text' => '選択してね',
+	// 												'actions' => $arrActions
+	// 										)
+	// 								)];
+	// 							}
+	// 						}
+	// 					}else{
+	// 						$messageData = array(
+	// 							array('type' => 'text', 'text' => $replyMsg),
+	// 							array('type' => 'text', 'text' => $listStores));
+	// 					}
+					
+	// 				break;
+	// 				case 4:
+	// 					if ($message_type == 'postback'){
+	// 						$data_chat['step'] = 5;
+	// 						$data_chat['message_ref'] = $store_id;
+	// // 						$store_id = $jsonObj->{"events"}[0]->{"postback"};
+	// // 						$store_id = $store_id->{"data"};
+	// 						$dataPB = $jsonObj->{"events"}[0]->{"postback"};
+	// 						$dataPB = $dataPB->{"data"};
+	// 						//$this->saveLog("dataPB", $dataPB);
+	// 						parse_str($dataPB, $postbackData);
+	// 						//$this->saveLog("store_id", $postbackData['value']);
+	// 						$lastOrder['step'] = 5;
+	// 						$lastOrder['store_id'] = $postbackData['value'];
+	// 					}
+	// 				break;
+
+	// 				case 5:
+	// 					if ($message_type == 'message'){
+	// 						$listStaffs = 'Have not any staff.';
+	// 						if($lastOrder['store_id'] && $lastOrder['store_id'] != ''){
+	// 							$data_chat['step'] = 6;
+	// 							$lastOrder['step'] = 6;
+	// 							$replyMsg = '担当者を入力してください。';
+	// 							$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
+	// 							if ($results != null){
+	// 								$staffs = $results["response"]["Items"]["Item"];
+	// 								$arrStaffs = $this->filterStaffs($staffs);
+	// 								if (count($arrStaffs) > 0)
+	// 									$listStaffs = implode("\n", $arrStaffs);
+	// 							}
+	// 						}
+	// 						$messageData = array(
+	// 							array('type' => 'text', 'text' => $replyMsg), 
+	// 							array('type' => 'text', 'text' => $listStaffs));
+	// 					}
 						
-					break;
-					case 6:
-						$replyMsg = '担当者を入力してください。';
-						$listStaffs = 'Have not any staffs.';
-						$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
-						if ($results != null){
-							$staffs = $results["response"]["Items"]["Item"];
-							$arrStaffs = $this->filterStaffs($staffs, $message_text);
-							//show list staff
-							if (count($arrStaffs) > 4){
-								$listStaffs = implode("\n", $arrStaffs);
-								$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStaffs));
-							}elseif (count($arrStaffs) > 0){//Show button staffs
-								$arrActions = array();
-								foreach ($arrStaffs as $staff_id => $staff_name){
-									$action = array();
-									$action['type'] = 'postback';
-									$action['label'] = $staff_name;
-									$action['data'] = 'key=staff&value=' . $staff_id;
-									$action['text'] = $staff_name;
-									$arrActions[] = $action;
-								}
-								//ボタンタイプ
-								$messageData = [array(
-										'type' => 'template',
-										'altText' => $replyMsg,
-										'template' => array(
-												'type' => 'buttons',
-												'title' => '担当者',
-												'text' => '選択してね',
-												'actions' => $arrActions
-										)
-								)];
+	// 				break;
+
+	// 				case 6:
+	// 					$replyMsg = '担当者を入力してください。';
+	// 					$listStaffs = 'Have not any staffs.';
+	// 					$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
+	// 					if ($results != null){
+	// 						$staffs = $results["response"]["Items"]["Item"];
+	// 						$arrStaffs = $this->filterStaffs($staffs, $message_text);
+	// 						//show list staff
+	// 						if (count($arrStaffs) > 4){
+	// 							$listStaffs = implode("\n", $arrStaffs);
+	// 							$messageData = array(
+	// 								array('type' => 'text', 'text' => $replyMsg),
+	// 								array('type' => 'text', 'text' => $listStaffs));
+	// 						}elseif (count($arrStaffs) > 0){//Show button staffs
+	// 							$arrActions = array();
+	// 							foreach ($arrStaffs as $staff_id => $staff_name){
+	// 								$action = array();
+	// 								$action['type'] = 'postback';
+	// 								$action['label'] = $staff_name;
+	// 								$action['data'] = 'key=staff&value=' . $staff_id;
+	// 								$action['text'] = $staff_name;
+	// 								$arrActions[] = $action;
+	// 							}
+	// 							//ボタンタイプ
+	// 							$messageData = [array(
+	// 									'type' => 'template',
+	// 									'altText' => $replyMsg,
+	// 									'template' => array(
+	// 											'type' => 'buttons',
+	// 											'title' => '担当者',
+	// 											'text' => '選択してね',
+	// 											'actions' => $arrActions
+	// 									)
+	// 							)];
 								
-							}else{
-								$arrStaffs = $this->filterStaffs($staffs);
-								$listStaffs = implode("\n", $arrStaffs);
-								$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStaffs));
-							}
-						}			
-					break;
+	// 						}else{
+	// 							$arrStaffs = $this->filterStaffs($staffs);
+	// 							$listStaffs = implode("\n", $arrStaffs);
+	// 							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStaffs));
+	// 						}
+	// 					}			
+	// 				break;
+
 					default:
 						$orderUpdate = false;
 						$replyMsg = $message->{"text"};
