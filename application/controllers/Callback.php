@@ -81,7 +81,7 @@ class Callback extends CI_Controller {
 					
 					break;
 				case 2:
-					//kt phone va mk ben api dung thi nhap order
+					//kt phone va mk ben api dung thi nhap cua hang
 					$this->load->library('eyelash_api');
 					$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
 					$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
@@ -93,7 +93,7 @@ class Callback extends CI_Controller {
 
 						// $list = $this->eyelash_api->list($lastMsg['message_ref'], $message->{"text"});
 						$messageData = array(
-							array('type' => 'text', 'text' => "danh dach cua hang")
+							array('type' => 'text', 'text' => $replyMsg)
 
 						);
 
