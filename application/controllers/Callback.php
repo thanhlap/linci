@@ -274,7 +274,7 @@ class Callback extends CI_Controller {
 						$messageData = array(
 							array('type' => 'text', 'text' => $replyMsg),
 							array('type' => 'text', 'text' => 'step ' . $step),
-							array('type' => 'text', 'text' => 'step ' . $store_id)
+							array('type' => 'text', 'text' => $lastOrder['store_id'])
 						);
 				}// switch ($step){ END
 				if($orderUpdate)
