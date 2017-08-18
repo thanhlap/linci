@@ -90,10 +90,10 @@ class Callback extends CI_Controller {
 						$data_chat['step'] = 3;
 						$replyMsg = '店舗を入力してください。';
 
-
 						// $list = $this->eyelash_api->list($lastMsg['message_ref'], $message->{"text"});
 						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg)
+							array('type' => 'text', 'text' => $replyMsg),
+							array('type' => 'text', 'text' => 'step ' . $step)
 
 						);
 
