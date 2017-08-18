@@ -50,7 +50,7 @@ class Eyelash_api{
 	}
 	
 	// API get list store
-	function listStore($mobile, $password)
+	function listStore($mobile, $password ,$store_id)
 	{
 		$api_time = Date('Y-m-d H:i:s');
 		$curl = curl_init();
@@ -72,7 +72,7 @@ class Eyelash_api{
 												<datetime>$api_time</datetime>\r    
 												<action>stores</action>\r  
 											<search>\r     
-												<store_id></store_id>\r     
+												<store_id>$store_id</store_id>\r     
 												<honbuflg>0</honbuflg>\r        
 												<sort><sort>ASC</sort></sort>\r   
 											</search>\r

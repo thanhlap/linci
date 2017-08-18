@@ -101,7 +101,7 @@ class Callback extends CI_Controller {
 							$listStores = 'Have not any store.';
 
 							//lấy ds cữa hàng
-							$list = $this->eyelash_api->listStore($lastOrder['username'],$lastOrder['password']);
+							$list = $this->eyelash_api->listStore($lastOrder['username'],$lastOrder['password'],$lastOrder['store_id']);
 							if ($list != null){
 								$stores = $list["response"]["Items"]["Item"];//lấy mảng item
 								if(($stores != NULL) && (count($stores) > 0)){
@@ -140,15 +140,17 @@ class Callback extends CI_Controller {
 									if (strpos($store['store_name'], $message_text) !== false) {
 										$arrStores[] = $store;
 										if ($listStores != '')
-											$listStores .= "\n";
-										$listStores .= $store['store_name'];
+											$listStores .= $store['store_name'];
+											$listStores .= "\n\n";
 									}
 								}
 								//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
 								if (count($arrStores) > 4){
 									$data_chat['step'] = 3;
 									$lastOrder['step'] = 3;
-									$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
+									$messageData = array(
+										array('type' => 'text', 'text' => $replyMsg), 
+										array('type' => 'text', 'text' => $listStores));
 								}else{
 									$data_chat['step'] = 4;
 									$lastOrder['step'] = 4;
@@ -175,8 +177,11 @@ class Callback extends CI_Controller {
 									)];
 								}
 							}
-						}else
-							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
+						}else{
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg),
+								array('type' => 'text', 'text' => $listStores));
+						}
 					
 					break;
 					case 4:
@@ -209,7 +214,9 @@ class Callback extends CI_Controller {
 										$listStaffs = implode("\n", $arrStaffs);
 								}
 							}
-							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStaffs));
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg), 
+								array('type' => 'text', 'text' => $listStaffs));
 						}
 						
 					break;
