@@ -185,21 +185,21 @@ class Callback extends CI_Controller {
 						}
 					
 					break;
-	// 				case 4:
-	// 					if ($message_type == 'postback'){
-	// 						$data_chat['step'] = 5;
-	// 						$data_chat['message_ref'] = $store_id;
-	// // 						$store_id = $jsonObj->{"events"}[0]->{"postback"};
-	// // 						$store_id = $store_id->{"data"};
-	// 						$dataPB = $jsonObj->{"events"}[0]->{"postback"};
-	// 						$dataPB = $dataPB->{"data"};
-	// 						//$this->saveLog("dataPB", $dataPB);
-	// 						parse_str($dataPB, $postbackData);
-	// 						//$this->saveLog("store_id", $postbackData['value']);
-	// 						$lastOrder['step'] = 5;
-	// 						$lastOrder['store_id'] = $postbackData['value'];
-	// 					}
-	// 				break;
+					case 4:
+						if ($message_type == 'postback'){
+							$data_chat['step'] = 5;
+							$data_chat['message_ref'] = $store_id;
+	// 						$store_id = $jsonObj->{"events"}[0]->{"postback"};
+	// 						$store_id = $store_id->{"data"};
+							$dataPB = $jsonObj->{"events"}[0]->{"postback"};
+							$dataPB = $dataPB->{"data"};
+							//$this->saveLog("dataPB", $dataPB);
+							parse_str($dataPB, $postbackData);
+							//$this->saveLog("store_id", $postbackData['value']);
+							$lastOrder['step'] = 5;
+							$lastOrder['store_id'] = $postbackData['value'];
+						}
+					break;
 
 	// 				case 5:
 	// 					if ($message_type == 'message'){
