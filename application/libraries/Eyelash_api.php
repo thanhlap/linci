@@ -65,14 +65,17 @@ class Eyelash_api{
 				CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r
 										<xml>\r    
 											<auth>\r        
-												<username>08041320468</username>\r        
-												<password>m</password>\r    </auth>\r    
-												<lang>en</lang><!--ja:日本語 zh_CN:中国語(簡体字) zh_TW:中国語(繁体字) en:英語-->\r    
+												<username>$mobile</username>\r        
+												<password>$password</password>\r   
+											</auth>\r    
+												<lang>en</lang>\r    
 												<datetime>$api_time</datetime>\r    
-												<action>stores</action>\r    <search>\r     
+												<action>stores</action>\r  
+											<search>\r     
 												<store_id></store_id>\r     
 												<honbuflg>0</honbuflg>\r        
-												<sort><sort>ASC</sort></sort>\r     </search>\r
+												<sort><sort>ASC</sort></sort>\r   
+											</search>\r
 										</xml>\r",
 					CURLOPT_HTTPHEADER => array(
 							"cache-control: no-cache",
@@ -90,8 +93,8 @@ class Eyelash_api{
 // 			echo "cURL Error #:" . $err;
 			return  null;
 		} else {
-			$result = json_decode(json_encode(simplexml_load_string($response)), true);
-			return $result;
+			$list = json_decode(json_encode(simplexml_load_string($response)), true);
+			return $list;
 		}
 	}
 	

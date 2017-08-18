@@ -14,7 +14,6 @@ class Callback extends CI_Controller {
 		$jsonObj = json_decode($jsonString);
 		$this->load->model('Log_model');
 		$this->saveLog('jsonString', $jsonString);
-		
 
 		$source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
 		$source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
@@ -24,8 +23,6 @@ class Callback extends CI_Controller {
 		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
 
 
-
-		
 		//Chat_log
 		$this->load->model('Chat_log');
 		$lastMsg = $this->Chat_log->getLastMsgByUserID($source_user_id);
@@ -47,14 +44,15 @@ class Callback extends CI_Controller {
 		
 		$this->load->model('Order_info');
 		$orderUpdate = true;
-		
+
 		// 送られてきたメッセージの中身からレスポンスのタイプを選択
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
-			// Start transaction order
+			
+			// save table chat_log
 			$data_chat['step'] = 1;
 			$this->Chat_log->insert($data_chat);
 			
-			////Order Info
+			//save Order Info
 			$dataOrder['source_user_id'] = $source_user_id;
 			$dataOrder['step'] = 1;
 			$dataOrder['created'] = Date('Y-m-d H:i:s');
@@ -64,56 +62,71 @@ class Callback extends CI_Controller {
 			$messageData = array(
 				array('type' => 'text', 'text' => "携帯番号を入力してください。?"),
 				array('type' => 'text', 'text' => 'start'));
+
 		} else{
 
 			$lastOrder = $this->Order_info->getLastOrderInfoByUserID($source_user_id);
 			if ($lastOrder == null){
+				//k/co order báo msg
 				$messageData = array(
 					array('type' => 'text', 'text' => "「予約」または「予約する」を入力してください。"), 
 					array('type' => 'text', 'text' => $message_text));
 			}else{
+
 				$this->load->library('eyelash_api');
 				$step = $lastOrder['step'];
 				//$step = 4;
 				switch ($step){
-					case 1:
+					case 1: // pass
 						$data_chat['step'] = 2;
 						$data_chat['message_ref'] = $message->{"text"};
 						$lastOrder['step'] = 2;
-						$lastOrder['username'] = $message_text;
-						$replyMsg = 'パスワードを入力してください。';
-						$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => 'step ' . $step));
+						$lastOrder['username'] = $message_text; //gán username vào order
+						$replyMsg = 'パスワードを入力してください。?';
+						$messageData = array(
+							array('type' => 'text', 'text' => $replyMsg), 
+							array('type' => 'text', 'text' => 'step ' . $step));
 					break;
-					case 2:
+					case 2://kt phone&&pass
 						$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
-						$lastOrder['password'] = $message_text;
-						$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . ', password: ' . $message->{"text"};
+
+						$lastOrder['password'] = $message_text;//gán pass vào order
+						$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . ', password: ' . $message->{"text"}; //save phone&&pass chat_log
+						
 						if ($result['result'] == "true"){
 							$data_chat['step'] = 3;
 							$lastOrder['step'] = 3;
 							
 							$replyMsg = '店舗を入力してください。';
 							$listStores = 'Have not any store.';
-							$results = $this->eyelash_api->listStore();
-							if ($results != null){
-								$stores = $results["response"]["Items"]["Item"];
+
+							//lấy ds cữa hàng
+							$list = $this->eyelash_api->listStore($lastOrder['username'],$lastOrder['password']);
+							if ($list != null){
+								$stores = $list["response"]["Items"]["Item"];//lấy mảng item
 								if(($stores != NULL) && (count($stores) > 0)){
 									$listStores = '';
 									foreach ($stores as $store){
 										if ($listStores != '')
 											$listStores .= "\n";
-										$listStores .= $store['store_name'];
+											$listStores .= $store['store_id'];
+											$listStores .= $store['store_name'];
+											$listStores .= "<hr>";
 									}
 								}
 							}
-							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg),
+								array('type' => 'text', 'text' => $listStores));
 						
 						}else{
 							$data_chat['step'] = 1;
 							$lastOrder['step'] = 1;
 							$replyMsg = 'Mobile number and password are not valid.';
-							//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
-							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
+							//nhập phone
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg),
+								array('type' => 'text', 'text' => '携帯番号を入力してください。'));
 						}
 					break;
 					case 3:
