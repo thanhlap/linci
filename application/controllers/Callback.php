@@ -90,17 +90,16 @@ class Callback extends CI_Controller {
 						$data_chat['step'] = 3;
 						$replyMsg = '店舗を入力してください。';
 
-						$data_chat['message_ref'] = $message->{"text"};
-						
-						$list = $this->eyelash_api->list($lastMsg['message_ref'], $message->{"text"});
+
+						// $list = $this->eyelash_api->list($lastMsg['message_ref'], $message->{"text"});
 						$messageData = array(
 							array('type' => 'text', 'text' => "danh dach cua hang")
 
 						);
 
-						foreach ($list as $key => $value) {
-							$messageData[] = array('type' => 'text', 'text' => $value);
-						}
+						// foreach ($list as $key => $value) {
+						// 	$messageData[] = array('type' => 'text', 'text' => $value);
+						// }
 
 						
 						
@@ -288,5 +287,56 @@ class Callback extends CI_Controller {
 		$result = curl_exec($ch);
 		error_log($result);
 		curl_close($ch);
+		echo "send success";
+	}
+
+
+	function test(){
+		$mobile = 'M';
+		$password = '08041320468';
+		$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+			CURLOPT_URL => "https://web.eyelashs.jp/Procare1/api/staffs/list.xml",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n
+									<xml>\r\n   
+									 	<auth>\r\n 
+									        <username>$mobile</username>\r\n  
+									        <password>$password</password>\r\n  
+									    </auth>\r\n   
+				                		<lang>jp</lang>\r\n 
+				                   		<datetime></datetime>\r\n 
+				                      	<action>staffs</action>\r\n 
+				                        <search>\r\n    
+				                            <store_id></store_id>\r\n 
+				                        </search>\r\n
+									</xml>\r\n",
+			CURLOPT_HTTPHEADER => array(
+					"cache-control: no-cache",
+					"content-type: application/xml",
+					"postman-token: 18abd983-2498-886c-485f-c05c3cf62e49"
+				),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+
+			/*if ($err) {
+				return null;
+			} else {
+				
+				return $list;
+			}*/
+		echo "<pre>";
+		$list = json_decode(json_encode(simplexml_load_string($response)), true);
+		print_r($list);exit;
 	}
 }

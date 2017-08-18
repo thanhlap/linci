@@ -61,7 +61,7 @@ class Eyelash_api{
 			CURLOPT_TIMEOUT => 30,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => "POST",
-			CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\">\r\n
+			CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n
 									<xml>\r\n   
 									 	<auth>\r\n 
 									        <username>$mobile</username>\r\n  
