@@ -45,8 +45,9 @@ class Callback extends CI_Controller {
 				'step' => 1
 		);
 		
-		
+		$this->load->model('Order_info');
 		$orderUpdate = true;
+		
 		// 送られてきたメッセージの中身からレスポンスのタイプを選択
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
 			// Start transaction order
@@ -54,7 +55,6 @@ class Callback extends CI_Controller {
 			$this->Chat_log->insert($data_chat);
 			
 			////Order Info
-			$this->load->model('Order_info');
 			$dataOrder['source_user_id'] = $source_user_id;
 			$dataOrder['step'] = 1;
 			$dataOrder['created'] = Date('Y-m-d H:i:s');
