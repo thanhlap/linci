@@ -101,7 +101,7 @@ class Callback extends CI_Controller {
 							$listStores = 'Have not any store.';
 
 							//lấy ds cữa hàng
-							$list = $this->eyelash_api->listStore($lastOrder['username'],$lastOrder['password'],$lastOrder['store_id']);
+							$list = $this->eyelash_api->listStore($lastOrder['username'],$lastOrder['password']);
 							if ($list != null){
 								$stores = $list["response"]["Items"]["Item"];//lấy mảng item
 								if(($stores != NULL) && (count($stores) > 0)){

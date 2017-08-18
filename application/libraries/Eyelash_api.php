@@ -50,7 +50,7 @@ class Eyelash_api{
 	}
 	
 	// API get list store
-	function listStore($mobile, $password ,$store_id)
+	function listStore($mobile, $password )
 	{
 		$api_time = Date('Y-m-d H:i:s');
 		$curl = curl_init();
@@ -118,8 +118,8 @@ class Eyelash_api{
 												<username>$mobile</username>\n        
 												<password>$password</password>\n    
 											</auth>\n    
-											<lang>en</lang><!--ja:日本語 zh_CN:中国語(簡体字) zh_TW:中国語(繁体字) en:英語-->\n    
-											<datetime>2017-08-02 13:00:00</datetime>\n    
+											<lang>en</lang>\n    
+											<datetime>$api_time</datetime>\n    
 											<action>staffs</action>\n    
 											<search>\n        
 												<store_id>$store_id</store_id>\n    
