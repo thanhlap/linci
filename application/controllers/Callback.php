@@ -147,11 +147,11 @@ class Callback extends CI_Controller {
 								}
 								//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
 								if (count($arrStores) > 4){
-									// $data_chat['step'] = 3;
-									// $lastOrder['step'] = 3;
-									// $messageData = array(
-									// 	array('type' => 'text', 'text' => $replyMsg), 
-									// 	array('type' => 'text', 'text' => $listStores));
+									$data_chat['step'] = 3;
+									$lastOrder['step'] = 3;
+									$messageData = array(
+										array('type' => 'text', 'text' => $replyMsg), 
+										array('type' => 'text', 'text' => $listStores));
 								}else{
 
 									//search hiện button
@@ -205,27 +205,27 @@ class Callback extends CI_Controller {
 						}
 					break;
 
-					// case 5:
-					// 	if ($message_type == 'message'){
-					// 		$listStaffs = 'Have not any staff.';
-					// 		if($lastOrder['store_id'] && $lastOrder['store_id'] != ''){
-					// 			$data_chat['step'] = 6;
-					// 			$lastOrder['step'] = 6;
-					// 			$replyMsg = '担当者を入力してください。';
-					// 			$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
-					// 			if ($results != null){
-					// 				$staffs = $results["response"]["Items"]["Item"];
-					// 				$arrStaffs = $this->filterStaffs($staffs);
-					// 				if (count($arrStaffs) > 0)
-					// 					$listStaffs = implode("\n", $arrStaffs);
-					// 			}
-					// 		}
-					// 		$messageData = array(
-					// 			array('type' => 'text', 'text' => $replyMsg), 
-					// 			array('type' => 'text', 'text' => $listStaffs));
-					// 	}
+					case 5:
+						if ($message_type == 'message'){
+							$listStaffs = 'Have not any staff.';
+							if($lastOrder['store_id'] && $lastOrder['store_id'] != ''){
+								$data_chat['step'] = 6;
+								$lastOrder['step'] = 6;
+								$replyMsg = '担当者を入力してください。';
+								$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
+								if ($results != null){
+									$staffs = $results["response"]["Items"]["Item"];
+									$arrStaffs = $this->filterStaffs($staffs);
+									if (count($arrStaffs) > 0)
+										$listStaffs = implode("\n", $arrStaffs);
+								}
+							}
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg), 
+								array('type' => 'text', 'text' => $listStaffs));
+						}
 						
-					// break;
+					break;
 
 					case 6:
 						$replyMsg = '担当者を入力してください。';
@@ -342,6 +342,7 @@ class Callback extends CI_Controller {
 		return $arrItems;
 	}
 	
+	//search người phụ trách
 	function filterStaffs($items, $keyword = ''){
 		$arrItems = array();
 		if(($items != NULL) && (count($items) > 0)){
@@ -358,14 +359,7 @@ class Callback extends CI_Controller {
 		return $arrItems;
 	}
 	
-// 	function saveLog($jsonString){
-// 		$dataLog = array(
-// 				'key_name' => 'jsonString',
-// 				'key_value' => $jsonString
-// 		);
-// 		$this->Log_model->insert($dataLog);
-// 	}
-	
+
 	// function testChat($message){
 	// 	if ($message->{"text"} == '確認') {
 	// 		// 確認ダイアログタイプ
