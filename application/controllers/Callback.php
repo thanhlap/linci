@@ -147,35 +147,37 @@ class Callback extends CI_Controller {
 								}
 								//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
 								if (count($arrStores) > 4){
-									$data_chat['step'] = 3;
-									$lastOrder['step'] = 3;
-									$messageData = array(
-										array('type' => 'text', 'text' => $replyMsg), 
-										array('type' => 'text', 'text' => $listStores));
+									// $data_chat['step'] = 3;
+									// $lastOrder['step'] = 3;
+									// $messageData = array(
+									// 	array('type' => 'text', 'text' => $replyMsg), 
+									// 	array('type' => 'text', 'text' => $listStores));
 								}else{
-									// $data_chat['step'] = 4;
-									// $lastOrder['step'] = 4;
-									// $arrActions = array();
-									// for ($i = 0; $i < count($arrStores); $i++){
-									// 	$action = array();
-									// 	$action['type'] = 'postback';
-									// 	$action['label'] = $arrStores[$i]['store_name'];
-									// 	$action['data'] = 'key=store&value=' . $arrStores[$i]['store_id'];
-									// 	//$action['data'] = $arrStores[$i]['store_id'];
-									// 	$action['text'] = $arrStores[$i]['store_name'];
-									// 	$arrActions[] = $action;
-									// }
-									// //ボタンタイプ
-									// $messageData = [array(
-									// 		'type' => 'template',
-									// 		'altText' => $replyMsg,
-									// 		'template' => array(
-									// 				'type' => 'buttons',
-									// 				'title' => '店舗',
-									// 				'text' => '選択してね',
-									// 				'actions' => $arrActions
-									// 		)
-									// )];
+
+									//search hiện button
+									$data_chat['step'] = 4;
+									$lastOrder['step'] = 4;
+									$arrActions = array();
+									for ($i = 0; $i < count($arrStores); $i++){
+										$action = array();
+										$action['type'] = 'postback';
+										$action['label'] = $arrStores[$i]['store_name'];
+										$action['data'] = 'key=store&value=' . $arrStores[$i]['store_id'];
+										//$action['data'] = $arrStores[$i]['store_id'];
+										$action['text'] = $arrStores[$i]['store_name'];
+										$arrActions[] = $action;
+									}
+									//ボタンタイプ
+									$messageData = [array(
+											'type' => 'template',
+											'altText' => $replyMsg,
+											'template' => array(
+													'type' => 'buttons',
+													'title' => '店舗',
+													'text' => '選択してね',
+													'actions' => $arrActions
+											)
+									)];
 								}
 							}
 						}else{
