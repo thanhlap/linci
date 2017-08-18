@@ -108,9 +108,6 @@ class Callback extends CI_Controller {
 									$listStores = '';
 									foreach ($stores as $store){
 										if ($listStores != '')
-											$listStores .= "\n";
-											'id'.$listStores .= $store['store_id'];
-											$listStores .= "\n";
 											$listStores .= $store['store_name'];
 											$listStores .= "\n\n";
 									}
