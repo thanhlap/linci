@@ -2,46 +2,34 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Callback extends CI_Controller {
-
-
+	
 	public function index()
 	{
 		$accessToken = 'CCTtRhug6RnXVdzkA88/gSRGGs28FtVCLrU1J0kEHB9pbzTgjM+j4S33vpj0uG1yHpTP67spi9zuY3WZVuSQueHXmJztPhyziWO13It8T3N+lvO4XEamCez7HhW1VvLjdXkVLCFEcy9XetSieJ2+IQdB04t89/1O/w1cDnyilFU=';
+		
 		$jsonString = file_get_contents('php://input');
+
+		//save table log
 		error_log($jsonString);
 		$jsonObj = json_decode($jsonString);
-
-
-		//mang dlieu dc luu
-		//{"events":[
-		// 	{
-		// 	"type":"message",
-		// 	"replyToken":"02cda49427d44245ad48fa12e9aac1ec",
-		// 	"source":{"userId":"U1b3204f97941cef5de9bab6d572104e5","type":"user"},
-		// 	"timestamp":1502855278336,
-		// 	"message":{"type":"text","id":"6550640608491","text":"予約"}}
-		// ]}
+		$this->load->model('Log_model');
+		$this->saveLog('jsonString', $jsonString);
+		
 
 		$source = $jsonObj->{"events"}[0]->{"source"}; //vao mang source trong table log
 		$source_user_id = $source->{"userId"};   //lay id suorce cua bang table log
 		$message = $jsonObj->{"events"}[0]->{"message"}; //vao mang message
+		$message_text = $message->{"text"};
+		$message_type = $jsonObj->{"events"}[0]->{"type"};
 		$replyToken = $jsonObj->{"events"}[0]->{"replyToken"}; //lay replyToken
+
+
+
 		
-		//luu bang log
-		$dataLog = array(
-				'key_name' => 'jsonString',
-				'key_value' => $jsonString
-		);
-
-		$this->load->model('Log_model');
-		$this->Log_model->insert($dataLog);
-
-
+		//Chat_log
 		$this->load->model('Chat_log');
-		//kt userId hien tai
 		$lastMsg = $this->Chat_log->getLastMsgByUserID($source_user_id);
-		$step = $lastMsg['step']; //lay step cua id do
-
+		//$step = $lastMsg['step'];
 		$replyMsg = "";
 
 		$data_chat = array(
@@ -57,286 +45,414 @@ class Callback extends CI_Controller {
 				'step' => 1
 		);
 		
-		// neu msg= "予約"" || msg= "予約する"" luu vao table chat_log
+		
+		$orderUpdate = true;
+		// 送られてきたメッセージの中身からレスポンスのタイプを選択
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
+			// Start transaction order
 			$data_chat['step'] = 1;
 			$this->Chat_log->insert($data_chat);
-			//hoi phone
+			
+			////Order Info
+			$this->load->model('Order_info');
+			$dataOrder['source_user_id'] = $source_user_id;
+			$dataOrder['step'] = 1;
+			$dataOrder['created'] = Date('Y-m-d H:i:s');
+			$this->Order_info->insert($dataOrder);
+			
+			// それ以外は送られてきたテキストをオウム返し
 			$messageData = array(
-				array('type' => 'text', 'text' => "携帯番号を入力してください。?"), 
-				array('type' => 'text', 'text' => 'start')
-			);
-			
+				array('type' => 'text', 'text' => "携帯番号を入力してください。?"),
+				array('type' => 'text', 'text' => 'start'));
 		} else{
-			switch ($step){
-				case 1:
-					$data_chat['step'] = 2;
-					$data_chat['message_ref'] = $message->{"text"};
-					$replyMsg = 'パスワードを入力してください。?';
 
-					$messageData = array(
-						array('type' => 'text', 'text' => $replyMsg),
-						array('type' => 'text', 'text' => 'step ' . $step)
-					);
-					
+			$lastOrder = $this->Order_info->getLastOrderInfoByUserID($source_user_id);
+			if ($lastOrder == null){
+				$messageData = array(
+					array('type' => 'text', 'text' => "「予約」または「予約する」を入力してください。"), 
+					array('type' => 'text', 'text' => $message_text));
+			}else{
+				$this->load->library('eyelash_api');
+				$step = $lastOrder['step'];
+				//$step = 4;
+				switch ($step){
+					case 1:
+						$data_chat['step'] = 2;
+						$data_chat['message_ref'] = $message->{"text"};
+						$lastOrder['step'] = 2;
+						$lastOrder['username'] = $message_text;
+						$replyMsg = 'パスワードを入力してください。';
+						$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => 'step ' . $step));
 					break;
-				case 2:
-					//kt phone va mk ben api dung thi nhap cua hang
-					$this->load->library('eyelash_api');
-					$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
-					$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . 'password: ' . $message->{"text"};
-
-					if ($result['result'] == "true"){
-						$data_chat['step'] = 3;
-						$replyMsg = '店舗を入力してください。';
-
-						// $list = $this->eyelash_api->list($lastMsg['message_ref'], $message->{"text"});
-						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg),
-							array('type' => 'text', 'text' => 'step ' . $step)
-
-						);
-
-						// foreach ($list as $key => $value) {
-						// 	$messageData[] = array('type' => 'text', 'text' => $value);
-						// }
-
-						
-						
-					}else{
-						$data_chat['step'] = 1;
-						$replyMsg = 'Mobile number and password is not valid.';
-						//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
-						$messageData = array(
-							array('type' => 'text', 'text' => $replyMsg),
-							array('type' => 'text', 'text' => '携帯番号を入力してください。')
-						);
-						
-					}
-					break;
-
-				// case 3:
-				// 		if($message->{"text"} == '確認'){
-				// 			$data_chat['step'] = 4;
-			
-				// 			// $replyMsg = 'test';
-				// 			$messageData = array(
-				// 				//array('type' => 'text', 'text' => $replyMsg), 
-				// 				array('type' => 'text', 'text' => 'step ' . $step),
-				// 				array(
-				// 					 	"type"=> "video",
-				// 					    "originalContentUrl"=> "https://example.com/original.mp4",
-				// 					    "previewImageUrl"=> "https://example.com/preview.jpg"
-				// 				),
-				// 				array(
-				// 						"type"=> "audio",
-				// 					    "originalContentUrl"=> "https://example.com/original.m4a",
-				// 					    "duration"=> 240000
-				// 				),
-				// 				array(
-				// 						"type"=> "location",
-				// 					    "title"=> "my location",
-				// 					    "address"=> "〒150-0002 東京都渋谷区渋谷２丁目２１−１",
-				// 					    "latitude"=> "35.65910807942215",
-				// 					    "longitude"=> "139.70372892916203"
-				// 				),
-				// 				// array(								
-				// 				//   	"type"=> "template",
-				// 				//     "altText"=> "this is a buttons template",
-								 
-				// 				// ),
+					case 2:
+						$result = $this->eyelash_api->login($lastMsg['message_ref'], $message->{"text"});
+						$lastOrder['password'] = $message_text;
+						$data_chat['message_ref'] = 'mobile: ' . $lastMsg['message_ref'] . ', password: ' . $message->{"text"};
+						if ($result['result'] == "true"){
+							$data_chat['step'] = 3;
+							$lastOrder['step'] = 3;
 							
-				// 			);
-				// 		}
-				// 	break;
-				
-					 	
-									
-				default:
-					$replyMsg = $message->{"text"};
-					$messageData = array(
-						array('type' => 'text', 'text' => $replyMsg),
-						array('type' => 'text', 'text' => 'step ' . $step)
-					);
+							$replyMsg = '店舗を入力してください。';
+							$listStores = 'Have not any store.';
+							$results = $this->eyelash_api->listStore();
+							if ($results != null){
+								$stores = $results["response"]["Items"]["Item"];
+								if(($stores != NULL) && (count($stores) > 0)){
+									$listStores = '';
+									foreach ($stores as $store){
+										if ($listStores != '')
+											$listStores .= "\n";
+										$listStores .= $store['store_name'];
+									}
+								}
+							}
+							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
+						
+						}else{
+							$data_chat['step'] = 1;
+							$lastOrder['step'] = 1;
+							$replyMsg = 'Mobile number and password are not valid.';
+							//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
+							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => '携帯番号を入力してください。'));
+						}
+					break;
+					case 3:
+						$replyMsg = '店舗を入力してください。';
+						$listStores = 'Have not any store.';
+						$results = $this->eyelash_api->listStore();
+						if ($results != null){
+							$stores = $results["response"]["Items"]["Item"];
+							if(($stores != NULL) && (count($stores) > 0)){
+								$arrStores = array();
+								$listStores = '';
+								foreach ($stores as $store){
+									if (strpos($store['store_name'], $message_text) !== false) {
+										$arrStores[] = $store;
+										if ($listStores != '')
+											$listStores .= "\n";
+										$listStores .= $store['store_name'];
+									}
+								}
+								//$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
+								if (count($arrStores) > 4){
+									$data_chat['step'] = 3;
+									$lastOrder['step'] = 3;
+									$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
+								}else{
+									$data_chat['step'] = 4;
+									$lastOrder['step'] = 4;
+									$arrActions = array();
+									for ($i = 0; $i < count($arrStores); $i++){
+										$action = array();
+										$action['type'] = 'postback';
+										$action['label'] = $arrStores[$i]['store_name'];
+										$action['data'] = 'key=store&value=' . $arrStores[$i]['store_id'];
+										//$action['data'] = $arrStores[$i]['store_id'];
+										$action['text'] = $arrStores[$i]['store_name'];
+										$arrActions[] = $action;
+									}
+									//ボタンタイプ
+									$messageData = [array(
+											'type' => 'template',
+											'altText' => $replyMsg,
+											'template' => array(
+													'type' => 'buttons',
+													'title' => '店舗',
+													'text' => '選択してね',
+													'actions' => $arrActions
+											)
+									)];
+								}
+							}
+						}else
+							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStores));
 					
-
-			}
-			//luu data table chat_log
-			$this->Chat_log->insert($data_chat);
-		}
+					break;
+					case 4:
+						if ($message_type == 'postback'){
+							$data_chat['step'] = 5;
+							$data_chat['message_ref'] = $store_id;
+	// 						$store_id = $jsonObj->{"events"}[0]->{"postback"};
+	// 						$store_id = $store_id->{"data"};
+							$dataPB = $jsonObj->{"events"}[0]->{"postback"};
+							$dataPB = $dataPB->{"data"};
+							//$this->saveLog("dataPB", $dataPB);
+							parse_str($dataPB, $postbackData);
+							//$this->saveLog("store_id", $postbackData['value']);
+							$lastOrder['step'] = 5;
+							$lastOrder['store_id'] = $postbackData['value'];
+						}
+					break;
+					case 5:
+						if ($message_type == 'message'){
+							$listStaffs = 'Have not any staff.';
+							if($lastOrder['store_id'] && $lastOrder['store_id'] != ''){
+								$data_chat['step'] = 6;
+								$lastOrder['step'] = 6;
+								$replyMsg = '担当者を入力してください。';
+								$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
+								if ($results != null){
+									$staffs = $results["response"]["Items"]["Item"];
+									$arrStaffs = $this->filterStaffs($staffs);
+									if (count($arrStaffs) > 0)
+										$listStaffs = implode("\n", $arrStaffs);
+								}
+							}
+							$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStaffs));
+						}
+						
+					break;
+					case 6:
+						$replyMsg = '担当者を入力してください。';
+						$listStaffs = 'Have not any staffs.';
+						$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
+						if ($results != null){
+							$staffs = $results["response"]["Items"]["Item"];
+							$arrStaffs = $this->filterStaffs($staffs, $message_text);
+							//show list staff
+							if (count($arrStaffs) > 4){
+								$listStaffs = implode("\n", $arrStaffs);
+								$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStaffs));
+							}elseif (count($arrStaffs) > 0){//Show button staffs
+								$arrActions = array();
+								foreach ($arrStaffs as $staff_id => $staff_name){
+									$action = array();
+									$action['type'] = 'postback';
+									$action['label'] = $staff_name;
+									$action['data'] = 'key=staff&value=' . $staff_id;
+									$action['text'] = $staff_name;
+									$arrActions[] = $action;
+								}
+								//ボタンタイプ
+								$messageData = [array(
+										'type' => 'template',
+										'altText' => $replyMsg,
+										'template' => array(
+												'type' => 'buttons',
+												'title' => '担当者',
+												'text' => '選択してね',
+												'actions' => $arrActions
+										)
+								)];
+								
+							}else{
+								$arrStaffs = $this->filterStaffs($staffs);
+								$listStaffs = implode("\n", $arrStaffs);
+								$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => $listStaffs));
+							}
+						}			
+					break;
+					default:
+						$orderUpdate = false;
+						$replyMsg = $message->{"text"};
+						$messageData = array(array('type' => 'text', 'text' => $replyMsg), array('type' => 'text', 'text' => 'step ' . $step));
+				}// switch ($step){ END
+				if($orderUpdate)
+					$this->Order_info->update($lastOrder);
+			} //if ($lastOrder == null){ END
+		}// 送られてきたメッセージの中身からレスポンスのタイプを選択 END
+		//save chat log debug
+		$this->Chat_log->insert($data_chat);
 		
-
-
-
-		// //test list
-		// if ($message->{"text"} == '確認') {
-		//     // 確認ダイアログタイプ
-		//     $messageData = [
-		//         'type' => 'template',
-		//         'altText' => '確認ダイアログ',
-		//         'template' => [
-		//             'type' => 'confirm',
-		//             'text' => '元気ですかー？',
-		//             'actions' => [
-		//                 [
-		//                     'type' => 'message',
-		//                     'label' => '元気です',
-		//                     'text' => '元気です'
-		//                 ],
-		//                 [
-		//                     'type' => 'message',
-		//                     'label' => 'まあまあです',
-		//                     'text' => 'まあまあです'
-		//                 ],
-		//             ]
-		//         ]
-		//     ];
-		// } elseif ($message->{"text"} == 'ボタン') {
-		//     // ボタンタイプ
-		//     $messageData = [
-		//         'type' => 'template',
-		//         'altText' => 'ボタン',
-		//         'template' => [
-		//             'type' => 'buttons',
-		//             'title' => 'タイトルです',
-		//             'text' => '選択してね',
-		//             'actions' => [
-		//                 [
-		//                     'type' => 'postback',
-		//                     'label' => 'webhookにpost送信',
-		//                     'data' => 'value'
-		//                 ],
-		//                 [
-		//                     'type' => 'uri',
-		//                     'label' => 'googleへ移動',
-		//                     'uri' => 'https://google.com'
-		//                 ]
-		//             ]
-		//         ]
-		//     ];
-		// } elseif ($message->{"text"} == 'カルーセル') {
-		//     // カルーセルタイプ
-		//     $messageData = [
-		//         'type' => 'template',
-		//         'altText' => 'カルーセル',
-		//         'template' => [
-		//             'type' => 'carousel',
-		//             'columns' => [
-		//                 [
-		//                     'title' => 'カルーセル1',
-		//                     'text' => 'カルーセル1です',
-		//                     'actions' => [
-		//                         [
-		//                             'type' => 'postback',
-		//                             'label' => 'webhookにpost送信',
-		//                             'data' => 'value'
-		//                         ],
-		//                         [
-		//                             'type' => 'uri',
-		//                             'label' => '美容の口コミ広場を見る',
-		//                             'uri' => 'http://clinic.e-kuchikomi.info/'
-		//                         ]
-		//                     ]
-		//                 ],
-		//                 [
-		//                     'title' => 'カルーセル2',
-		//                     'text' => 'カルーセル2です',
-		//                     'actions' => [
-		//                         [
-		//                             'type' => 'postback',
-		//                             'label' => 'webhookにpost送信',
-		//                             'data' => 'value'
-		//                         ],
-		//                         [
-		//                             'type' => 'uri',
-		//                             'label' => '女美会を見る',
-		//                             'uri' => 'https://jobikai.com/'
-		//                         ]
-		//                     ]
-		//                 ],
-		//             ]
-		//         ]
-		//     ];
-		// } else {
-		//     // それ以外は送られてきたテキストをオウム返し
-		//     $messageData = [
-		//         'type' => 'text',
-		//         'text' => $message->{"text"}
-		//     ];
-		// }
-
-
-
-		$response = [
-				'replyToken' => $replyToken,
-				'messages' => $messageData 
-				//'messages' => [$messageData, array('type' => 'step', 'text' => $step)]
-				//'messages' => array(array('type' => 'text', 'text' => "qw"), array('type' => 'text', 'text' => '1234'))
-		];
-		error_log(json_encode($response));
+		//test
+		//$messageData = $this->testChat($message);
 		
-		$ch = curl_init('https://api.line.me/v2/bot/message/reply');
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				'Content-Type: application/json; charser=UTF-8',
-				'Authorization: Bearer ' . $accessToken
-		));
-		$result = curl_exec($ch);
-		error_log($result);
-		curl_close($ch);
-		echo "send success";
-	}
-
-
-	function test(){
-		$mobile = 'M';
-		$password = '08041320468';
-		$curl = curl_init();
-
-			curl_setopt_array($curl, array(
-			CURLOPT_URL => "https://web.eyelashs.jp/Procare1/api/staffs/list.xml",
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => "",
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 30,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => "POST",
-			CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n
-									<xml>\r\n   
-									 	<auth>\r\n 
-									        <username>$mobile</username>\r\n  
-									        <password>$password</password>\r\n  
-									    </auth>\r\n   
-				                		<lang>jp</lang>\r\n 
-				                   		<datetime></datetime>\r\n 
-				                      	<action>staffs</action>\r\n 
-				                        <search>\r\n    
-				                            <store_id></store_id>\r\n 
-				                        </search>\r\n
-									</xml>\r\n",
-			CURLOPT_HTTPHEADER => array(
-					"cache-control: no-cache",
-					"content-type: application/xml",
-					"postman-token: 18abd983-2498-886c-485f-c05c3cf62e49"
-				),
+		if ($message_type == 'message'){
+			$response = [
+					'replyToken' => $replyToken,
+					'messages' => $messageData
+					//'messages' => [$messageData, array('type' => 'step', 'text' => $step)]
+					//'messages' => array(array('type' => 'text', 'text' => "qw"), array('type' => 'text', 'text' => '1234'))
+			];
+			error_log(json_encode($response));
+			
+			$ch = curl_init('https://api.line.me/v2/bot/message/reply');
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($response));
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'Content-Type: application/json; charser=UTF-8',
+					'Authorization: Bearer ' . $accessToken
 			));
-
-			$response = curl_exec($curl);
-			$err = curl_error($curl);
-
-			curl_close($curl);
-
-			/*if ($err) {
-				return null;
-			} else {
-				
-				return $list;
-			}*/
-		echo "<pre>";
-		$list = json_decode(json_encode(simplexml_load_string($response)), true);
-		print_r($list);exit;
+			$result = curl_exec($ch);
+			
+			$this->saveLog($result, json_encode($response));
+			
+			error_log($result);
+			curl_close($ch);
+		}
 	}
+	
+	function saveLog($key, $value){
+		$errorLog = array(
+				'key_name' => $key,
+				'key_value' => $value
+		);
+		$this->Log_model->insert($errorLog);
+	}
+	
+	function filterItems($items, $keyword = ''){
+		$arrItems = array();
+		if(($items != NULL) && (count($items) > 0)){
+			foreach ($items as $item){
+				$obj['id'] = $item['store_id'];
+				$obj['name'] = $item['store_name'];
+				if ($keyword != ''){
+					if (strpos($item['store_name'], $keyword) !== false) {
+						$arrItems[] = $obj;
+					}
+				}
+				else
+					$arrItems[] = $obj;
+			}
+		}
+		return $arrItems;
+	}
+	
+	function filterStaffs($items, $keyword = ''){
+		$arrItems = array();
+		if(($items != NULL) && (count($items) > 0)){
+			foreach ($items as $item){
+				if ($keyword != ''){
+					if (strpos($item['lastname'], $keyword) !== false) {
+						$arrItems[$item['staff_id']] = $item['lastname'];
+					}
+				}
+				else
+					$arrItems[$item['staff_id']] = $item['lastname'];
+			}
+		}
+		return $arrItems;
+	}
+	
+// 	function saveLog($jsonString){
+// 		$dataLog = array(
+// 				'key_name' => 'jsonString',
+// 				'key_value' => $jsonString
+// 		);
+// 		$this->Log_model->insert($dataLog);
+// 	}
+	
+	// function testChat($message){
+	// 	if ($message->{"text"} == '確認') {
+	// 		// 確認ダイアログタイプ
+	// 		$messageData = [
+	// 				'type' => 'template',
+	// 				'altText' => '確認ダイアログ',
+	// 				'template' => [
+	// 						'type' => 'confirm',
+	// 						'text' => '元気ですかー？',
+	// 						'actions' => [
+	// 								[
+	// 										'type' => 'message',
+	// 										'label' => '元気です',
+	// 										'text' => '元気です'
+	// 								],
+	// 								[
+	// 										'type' => 'message',
+	// 										'label' => 'まあまあです',
+	// 										'text' => 'まあまあです'
+	// 								],
+	// 						]
+	// 				]
+	// 		];
+	// 	} elseif ($message->{"text"} == 'ボタン') {
+	// 		// ボタンタイプ
+	// 		$messageData = [
+	// 				'type' => 'template',
+	// 				'altText' => 'ボタン',
+	// 				'template' => [
+	// 						'type' => 'buttons',
+	// 						'title' => 'タイトルです',
+	// 						'text' => '選択してね',
+	// 						'actions' => [
+	// 								[
+	// 										'type' => 'postback',
+	// 										'label' => 'webhookにpost送信',
+	// 										'data' => 'value'
+	// 								],
+	// 								[
+	// 										'type' => 'uri',
+	// 										'label' => 'googleへ移動',
+	// 										'uri' => 'https://google.com'
+	// 								]
+	// 						]
+	// 				]
+	// 		];
+	// 		// 								$messageData = array(array(
+	// 		// 										'type' => 'template',
+	// 		// 										'altText' => 'ボタン',
+	// 		// 										'template' => array(
+	// 				// 												'type' => 'buttons',
+	// 		// 												'title' => 'タイトルです',
+	// 		// 												'text' => '選択してね',
+	// 		// 												'actions' => array(
+	// 				// 														array(
+	// 						// 																'type' => 'postback',
+	// 						// 																'label' => 'webhookにpost送信',
+	// 						// 																'data' => 'value'
+	// 						// 														),
+	// 		// 														array(
+	// 				// 																'type' => 'uri',
+	// 		// 																'label' => 'googleへ移動',
+	// 		// 																'uri' => 'https://google.com'
+	// 		// 														)
+	// 		// 												)
+	// 		// 										)
+	// 		// 								));
+					
+	// 	} elseif ($message->{"text"} == 'カルーセル') {
+	// 		// カルーセルタイプ
+	// 		$messageData = [
+	// 				'type' => 'template',
+	// 				'altText' => 'カルーセル',
+	// 				'template' => [
+	// 						'type' => 'carousel',
+	// 						'columns' => [
+	// 								[
+	// 										'title' => 'カルーセル1',
+	// 										'text' => 'カルーセル1です',
+	// 										'actions' => [
+	// 												[
+	// 														'type' => 'postback',
+	// 														'label' => 'webhookにpost送信',
+	// 														'data' => 'value'
+	// 												],
+	// 												[
+	// 														'type' => 'uri',
+	// 														'label' => '美容の口コミ広場を見る',
+	// 														'uri' => 'http://clinic.e-kuchikomi.info/'
+	// 												]
+	// 										]
+	// 								],
+	// 								[
+	// 										'title' => 'カルーセル2',
+	// 										'text' => 'カルーセル2です',
+	// 										'actions' => [
+	// 												[
+	// 														'type' => 'postback',
+	// 														'label' => 'webhookにpost送信',
+	// 														'data' => 'value'
+	// 												],
+	// 												[
+	// 														'type' => 'uri',
+	// 														'label' => '女美会を見る',
+	// 														'uri' => 'https://jobikai.com/'
+	// 												]
+	// 										]
+	// 								],
+	// 						]
+	// 				]
+	// 		];
+	// 	} else {
+	// 					// それ以外は送られてきたテキストをオウム返し
+	// 					$messageData = [
+	// 							'type' => 'text',
+	// 							'text' => $message->{"text"}
+	// 					];
+	// 	}
+	// 	return [$messageData];
+	// }
+	
 }
