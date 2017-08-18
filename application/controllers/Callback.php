@@ -185,43 +185,43 @@ class Callback extends CI_Controller {
 						}
 					
 					break;
-					case 4:
-						if ($message_type == 'postback'){
-							$data_chat['step'] = 5;
-							$data_chat['message_ref'] = $store_id;
-	// 						$store_id = $jsonObj->{"events"}[0]->{"postback"};
-	// 						$store_id = $store_id->{"data"};
-							$dataPB = $jsonObj->{"events"}[0]->{"postback"};
-							$dataPB = $dataPB->{"data"};
-							//$this->saveLog("dataPB", $dataPB);
-							parse_str($dataPB, $postbackData);
-							//$this->saveLog("store_id", $postbackData['value']);
-							$lastOrder['step'] = 5;
-							$lastOrder['store_id'] = $postbackData['value'];
-						}
-					break;
-
-	// 				case 5:
-	// 					if ($message_type == 'message'){
-	// 						$listStaffs = 'Have not any staff.';
-	// 						if($lastOrder['store_id'] && $lastOrder['store_id'] != ''){
-	// 							$data_chat['step'] = 6;
-	// 							$lastOrder['step'] = 6;
-	// 							$replyMsg = '担当者を入力してください。';
-	// 							$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
-	// 							if ($results != null){
-	// 								$staffs = $results["response"]["Items"]["Item"];
-	// 								$arrStaffs = $this->filterStaffs($staffs);
-	// 								if (count($arrStaffs) > 0)
-	// 									$listStaffs = implode("\n", $arrStaffs);
-	// 							}
-	// 						}
-	// 						$messageData = array(
-	// 							array('type' => 'text', 'text' => $replyMsg), 
-	// 							array('type' => 'text', 'text' => $listStaffs));
+	// 				case 4:
+	// 					if ($message_type == 'postback'){
+	// 						$data_chat['step'] = 5;
+	// 						$data_chat['message_ref'] = $store_id;
+	// // 						$store_id = $jsonObj->{"events"}[0]->{"postback"};
+	// // 						$store_id = $store_id->{"data"};
+	// 						$dataPB = $jsonObj->{"events"}[0]->{"postback"};
+	// 						$dataPB = $dataPB->{"data"};
+	// 						//$this->saveLog("dataPB", $dataPB);
+	// 						parse_str($dataPB, $postbackData);
+	// 						//$this->saveLog("store_id", $postbackData['value']);
+	// 						$lastOrder['step'] = 5;
+	// 						$lastOrder['store_id'] = $postbackData['value'];
 	// 					}
-						
 	// 				break;
+
+					case 5:
+						if ($message_type == 'message'){
+							$listStaffs = 'Have not any staff.';
+							if($lastOrder['store_id'] && $lastOrder['store_id'] != ''){
+								$data_chat['step'] = 6;
+								$lastOrder['step'] = 6;
+								$replyMsg = '担当者を入力してください。';
+								$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
+								if ($results != null){
+									$staffs = $results["response"]["Items"]["Item"];
+									$arrStaffs = $this->filterStaffs($staffs);
+									if (count($arrStaffs) > 0)
+										$listStaffs = implode("\n", $arrStaffs);
+								}
+							}
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg), 
+								array('type' => 'text', 'text' => $listStaffs));
+						}
+						
+					break;
 
 	// 				case 6:
 	// 					$replyMsg = '担当者を入力してください。';
