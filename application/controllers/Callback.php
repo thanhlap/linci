@@ -280,8 +280,8 @@ class Callback extends CI_Controller {
 					break;
 
 					case 7:
-						$data_chat['step'] = 3;
-						$lastOrder['step'] = 3;
+						$data_chat['step'] = 8;
+						$lastOrder['step'] = 8;
 						
 						$replyMsg = '店舗を入力してください。';
 						$listStores = 'Have not any store.';
