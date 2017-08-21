@@ -489,7 +489,7 @@ class Callback extends CI_Controller {
 					if (strpos($item['mobile_name'], $keyword) !== false) {
 						$arrItems[$item['practitioner_id']] = $item['mobile_name'];
 					}
-				}
+				;}
 				else
 					$arrItems[$item['practitioner_id']] = $item['mobile_name'];
 			}
