@@ -339,7 +339,7 @@ class Callback extends CI_Controller {
 							//show list staff
 							if (count($arrtreatment) > 4){
 								// $listtreatment = implode("\n", $arrtreatment);
-								$listtreatment .= $treatment['mobile_name'];
+								$listtreatment .= $treatment['name'];
 								$listtreatment .= "\n\n";
 
 								$messageData = array(
@@ -486,12 +486,12 @@ class Callback extends CI_Controller {
 		if(($items != NULL) && (count($items) > 0)){
 			foreach ($items as $item){
 				if ($keyword != ''){
-					if (strpos($item['mobile_name'], $keyword) !== false) {
-						$arrItems[$item['practitioner_id']] = $item['mobile_name'];
+					if (strpos($item['name'], $keyword) !== false) {
+						$arrItems[$item['practitioner_id']] = $item['name'];
 					}
-				;}
+				}
 				else
-					$arrItems[$item['practitioner_id']] = $item['mobile_name'];
+					$arrItems[$item['practitioner_id']] = $item['name'];
 			}
 		}
 		return $arrItems;
