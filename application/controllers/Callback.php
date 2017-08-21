@@ -307,15 +307,9 @@ class Callback extends CI_Controller {
 								$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
 								if ($results != null){
 									$treatment = $results["response"]["Items"]["Item"];
-									// $arrtreatment = $this->filtertreatment($treatment);
-									// if (count($arrtreatment) > 0)
-									// 	$listtreatment = implode("\n", $arrtreatment);
-									$listtreatment = '';
-									foreach ($treatment as $treatment){
-										if ($listtreatment != '')
-											$listtreatment .= $treatment['name'];
-											$listtreatment .= "\n\n";
-									}		
+									$arrtreatment = $this->filtertreatment($treatment);
+									if (count($arrtreatment) > 0)
+										$listtreatment = implode("\n", $arrtreatment);
 								}
 							}
 							$messageData = array(
@@ -325,68 +319,69 @@ class Callback extends CI_Controller {
 						
 					break;
 
-					// case 9://DS DỊCH VỤ
-					// 	$replyMsg = '施術一覧からタップ';
-					// 	$listtreatment = 'Have not any staffs.';
-					// 	$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
-					// 	if ($results != null){
-					// 		$treatment = $results["response"]["Items"]["Item"];
+					case 9://DS DỊCH VỤ
+						$replyMsg = '施術一覧からタップ';
+						$listtreatment = 'Have not any staffs.';
+						$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+						if ($results != null){
+							$treatment = $results["response"]["Items"]["Item"];
 							
-					// 		$listtreatment = '';
-					// 		foreach ($treatment as $treatment){
-					// 			if ($listtreatment != '')
-					// 				$listtreatment .= $treatment['name'];
-					// 				$listtreatment .= "\n\n";
-					// 		}
+							// $listtreatment = '';
+							// foreach ($treatment as $treatment){
+							// 	if ($listtreatment != '')
+							// 		$listtreatment .= $treatment['name'];
+							// 		$listtreatment .= "\n\n";
+							// }
 								
 
-					// 		// $arrtreatment = $this->filtertreatment($treatment, $message_text);
-					// 		// //show list staff
-					// 		// if (count($arrtreatment) > 4){
-					// 		// 	$listtreatment = implode("\n", $arrtreatment);
-					// 		// 	$messageData = array(
-					// 		// 		array('type' => 'text', 'text' => $replyMsg),
-					// 		// 		array('type' => 'text', 'text' => $listtreatment));
-					// 		// }elseif (count($arrtreatment) > 0){//Show button treatment
+							$arrtreatment = $this->filtertreatment($treatment, $message_text);
+							//show list staff
+							if (count($arrtreatment) > 4){
+								$listtreatment = implode("\n", $arrtreatment);
+								$messageData = array(
+									array('type' => 'text', 'text' => $replyMsg),
+									array('type' => 'text', 'text' => $listtreatment));
 
-					// 		// 	$data_chat['step'] = 10;
-					// 		// 	$lastOrder['step'] = 10;
+							}elseif (count($arrtreatment) > 0){//Show button treatment
 
-					// 		// 	$arrActions = array();
-					// 		// 	foreach ($arrtreatment as $treatment_id => $treatment_name){
-					// 		// 		$action = array();
-					// 		// 		$action['type'] = 'postback';
-					// 		// 		$action['label'] = $staff_name;
-					// 		// 		$action['data'] = 'key=staff&value=' . $treatment_id;
-					// 		// 		$action['text'] = $treatment_name;
-					// 		// 		$arrActions[] = $action;
-					// 		// 	}
-					// 		// 	//ボタンタイプ
-					// 		// 	$messageData = [array(
-					// 		// 			'type' => 'template',
-					// 		// 			'altText' => $replyMsg,
-					// 		// 			'template' => array(
-					// 		// 					'type' => 'buttons',
-					// 		// 					'title' => '担当者',
-					// 		// 					'text' => '選択してね',
-					// 		// 					'actions' => $arrActions
-					// 		// 			)
-					// 		// 	)];
+								$data_chat['step'] = 10;
+								$lastOrder['step'] = 10;
+
+								$arrActions = array();
+								foreach ($arrtreatment as $treatment_id => $treatment_name){
+									$action = array();
+									$action['type'] = 'postback';
+									$action['label'] = $treatment_name;
+									$action['data'] = 'key=treatment&value=' . $treatment_id;
+									$action['text'] = $treatment_name;
+									$arrActions[] = $action;
+								}
+								//ボタンタイプ
+								$messageData = [array(
+										'type' => 'template',
+										'altText' => $replyMsg,
+										'template' => array(
+												'type' => 'buttons',
+												'title' => '担当者',
+												'text' => '選択してね',
+												'actions' => $arrActions
+										)
+								)];
 								
-					// 		// }else{
-					// 		// 	$arrtreatment = $this->filtertreatment($treatment);
-					// 		// 	$listtreatment = implode("\n", $arrtreatment);
-					// 		// 	$messageData = array(
-					// 		// 		array('type' => 'text', 'text' => $replyMsg),
-					// 		// 		array('type' => 'text', 'text' => $listtreatment));
-					// 		// }
+							}else{
+								$arrtreatment = $this->filtertreatment($treatment);
+								$listtreatment = implode("\n", $arrtreatment);
+								$messageData = array(
+									array('type' => 'text', 'text' => $replyMsg),
+									array('type' => 'text', 'text' => $listtreatment));
+							}
 
 
-					// 	}	
-					// 	$messageData = array(
-					// 			array('type' => 'text', 'text' => $replyMsg),
-					// 			array('type' => 'text', 'text' => $listtreatment));		
-					// break;
+						}	
+						$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg),
+								array('type' => 'text', 'text' => $listtreatment));		
+					break;
 
 
 					default:
