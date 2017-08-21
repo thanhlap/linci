@@ -304,7 +304,12 @@ class Callback extends CI_Controller {
 								$data_chat['step'] = 9;
 								$lastOrder['step'] = 9;
 								$replyMsg = '施術一覧からタップ';
-								$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+								// $results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+								if($is_child == false){
+									$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+								}else{
+									$results = $this->eyelash_api->listsetmenu($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+								}
 								if ($results != null){
 									$treatment = $results["response"]["Items"]["Item"];
 									$arrtreatment = $this->filtertreatment($treatment);
