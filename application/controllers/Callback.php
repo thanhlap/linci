@@ -299,7 +299,8 @@ class Callback extends CI_Controller {
 						//search treatment_id để lấy tât cả dịch vụ
 						if ($message_type == 'message'){
 							$listtreatment = 'Have not any staff.';
-							if($lastOrder['treatment_id'] && $is_child == 'false' && $lastOrder['treatment_id'] != ''){
+							if($lastOrder['treatment_id'] && $lastOrder['treatment_id'] != ''){
+								$is_child == 'false';
 								$data_chat['step'] = 9;
 								$lastOrder['step'] = 9;
 								$replyMsg = '施術一覧からタップ';
@@ -310,18 +311,6 @@ class Callback extends CI_Controller {
 									if (count($arrtreatment) > 0)
 										$listtreatment = implode("\n", $arrtreatment);
 								}
-							}else{
-								// $data_chat['step'] = 9;
-								// $lastOrder['step'] = 9;
-								// $replyMsg = '施術一覧からタップ';
-								// $results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
-								// if ($results != null){
-								// 	$treatment = $results["response"]["Items"]["Item"];
-								// 	$arrtreatment = $this->filtertreatment($treatment);
-								// 	if (count($arrtreatment) > 0)
-								// 		$listtreatment = implode("\n", $arrtreatment);
-								// }
-								echo true;
 							}
 							$messageData = array(
 								array('type' => 'text', 'text' => $replyMsg), 
