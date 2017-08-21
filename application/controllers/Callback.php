@@ -486,12 +486,12 @@ class Callback extends CI_Controller {
 		if(($items != NULL) && (count($items) > 0)){
 			foreach ($items as $item){
 				if ($keyword != ''){
-					if (strpos($item['name'], $keyword) !== false) {
-						$arrItems[$item['practitioner_id']] = $item['name'];
+					if (strpos($item['mobile_name'], $keyword) !== false) {
+						$arrItems[$item['practitioner_id']] = $item['mobile_name'];
 					}
 				}
 				else
-					$arrItems[$item['practitioner_id']] = $item['name'];
+					$arrItems[$item['practitioner_id']] = $item['mobile_name'];
 			}
 		}
 		return $arrItems;
