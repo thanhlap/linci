@@ -168,7 +168,7 @@ class Eyelash_api{
 			        </auth>\r\n   
 			         	<lang>%en%</lang>\r\n  
 			           	<datetime></datetime>\r\n   
-			            <action>staffs</action>\r\n  
+			            <action>practitioners</action>\r\n  
 			            <search>\r\n   
 			                <store_id>$store_id</store_id>\r\n 
 			                <is_child>$is_child</is_child>\r\n 
@@ -214,7 +214,7 @@ class Eyelash_api{
 			        </auth>\r\n   
 			         	<lang>%en%</lang>\r\n  
 			           	<datetime></datetime>\r\n   
-			            <action>staffs</action>\r\n  
+			            <action>practitioners</action>\r\n  
 			            <search>\r\n   
 			                <store_id>$store_id</store_id>\r\n 
 			                <is_child>$is_child</is_child>\r\n 
