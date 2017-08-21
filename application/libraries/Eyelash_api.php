@@ -147,7 +147,7 @@ class Eyelash_api{
 	}
 	
 
-	public function listtreatment($mobile, $password, $treatment_id){
+	public function listtreatment($mobile, $password, $store_id){
 
 			$curl = curl_init();
 
@@ -169,7 +169,7 @@ class Eyelash_api{
 			           	<datetime></datetime>\r\n   
 			            <action>staffs</action>\r\n  
 			            <search>\r\n   
-			                <store_id>$treatment_id</store_id>\r\n 
+			                <store_id>$store_id</store_id>\r\n 
 			                <is_child>false</is_child>\r\n 
 			            </search>\r\n
 			    </xml>\r\n",
