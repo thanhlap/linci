@@ -300,16 +300,31 @@ class Callback extends CI_Controller {
 						if ($message_type == 'message'){
 							$listtreatment = 'Have not any staff.';
 							if($lastOrder['treatment_id'] && $lastOrder['treatment_id'] != ''){
-								$is_child == 'false';
+								$is_child == 'false'
 								$data_chat['step'] = 9;
 								$lastOrder['step'] = 9;
 								$replyMsg = '施術一覧からタップ';
 								$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
 								if ($results != null){
-									$treatment = $results["response"]["Items"]["Item"];
-									$arrtreatment = $this->filtertreatment($treatment);
-									if (count($arrtreatment) > 0)
-										$listtreatment = implode("\n", $arrtreatment);
+									// $treatment = $results["response"]["Items"]["Item"];
+									// $arrtreatment = $this->filtertreatment($treatment);
+									// if (count($arrtreatment) > 0)
+									// 	$listtreatment = implode("\n", $arrtreatment);
+
+
+										$treatment = $results["response"]["Items"]["Item"];//lấy mảng item
+										if(($treatment != NULL) && (count($treatment) > 0)){
+											$listtreatment = '';
+											foreach ($treatment as $treatment){
+												if ($listtreatment != '')
+													$listtreatment .= $treatment['name'];
+													$listtreatment .= "\n\n";
+											}
+										}
+
+
+
+
 								}
 							}
 							$messageData = array(
