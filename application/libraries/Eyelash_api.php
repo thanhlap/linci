@@ -149,7 +149,6 @@ class Eyelash_api{
 
 	public function listtreatment($mobile, $password, $store_id){
 
-			$is_child = false;
 			$api_time = Date('Y-m-d H:i:s');
 			$curl = curl_init();
 
@@ -172,7 +171,7 @@ class Eyelash_api{
 			            <action>practitioners</action>\r\n  
 			            <search>\r\n   
 			                <store_id>$store_id</store_id>\r\n 
-			                <is_child>$is_child</is_child>\r\n 
+			                <is_child>false</is_child>\r\n 
 			            </search>\r\n
 			    </xml>\r\n",
 			  CURLOPT_HTTPHEADER => array(
@@ -195,8 +194,6 @@ class Eyelash_api{
 	}
 
 	public function listsetmenu($mobile, $password, $store_id){
-
-			$is_child = true;
 			$api_time = Date('Y-m-d H:i:s');
 			$curl = curl_init();
 
@@ -219,7 +216,7 @@ class Eyelash_api{
 			            <action>practitioners</action>\r\n  
 			            <search>\r\n   
 			                <store_id>$store_id</store_id>\r\n 
-			                <is_child>$is_child</is_child>\r\n 
+			                <is_child>true</is_child>\r\n 
 			            </search>\r\n
 			    </xml>\r\n",
 			  CURLOPT_HTTPHEADER => array(
