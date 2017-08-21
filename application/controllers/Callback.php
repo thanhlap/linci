@@ -318,7 +318,7 @@ class Callback extends CI_Controller {
 						
 					break;
 
-					case 6://DS DỊCH VỤ
+					case 9://DS DỊCH VỤ
 						$replyMsg = '担当者を入力してください。';
 						$listtreatment = 'Have not any staffs.';
 						$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
@@ -333,8 +333,8 @@ class Callback extends CI_Controller {
 									array('type' => 'text', 'text' => $listtreatment));
 							}elseif (count($arrtreatment) > 0){//Show button treatment
 
-								$data_chat['step'] = 7;
-								$lastOrder['step'] = 7;
+								$data_chat['step'] = 10;
+								$lastOrder['step'] = 10;
 
 								$arrActions = array();
 								foreach ($arrtreatment as $treatment_id => $treatment_name){
