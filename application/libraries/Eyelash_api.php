@@ -149,6 +149,7 @@ class Eyelash_api{
 
 	public function listtreatment($mobile, $password, $store_id){
 
+			$is_child = false;
 			$curl = curl_init();
 
 			curl_setopt_array($curl, array(
@@ -170,7 +171,53 @@ class Eyelash_api{
 			            <action>staffs</action>\r\n  
 			            <search>\r\n   
 			                <store_id>$store_id</store_id>\r\n 
-			                <is_child>false</is_child>\r\n 
+			                <is_child>$is_child</is_child>\r\n 
+			            </search>\r\n
+			    </xml>\r\n",
+			  CURLOPT_HTTPHEADER => array(
+			    "cache-control: no-cache",
+			    "content-type: application/xml",
+			    "postman-token: 3744ff49-86c5-0285-0700-a95620a47180"
+			  ),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			if ($err) {
+			// 			echo "cURL Error #:" . $err;
+				return  null;
+			} else {
+				$result = json_decode(json_encode(simplexml_load_string($response)), true);
+				return $result;
+			}
+	}
+
+	public function listsetmenu($mobile, $password, $store_id){
+
+			$is_child = true;
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+			  CURLOPT_URL => "https://web.eyelashs.jp/Procare1/api/practitioners/list.xml",
+			  CURLOPT_RETURNTRANSFER => true,
+			  CURLOPT_ENCODING => "",
+			  CURLOPT_MAXREDIRS => 10,
+			  CURLOPT_TIMEOUT => 30,
+			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			  CURLOPT_CUSTOMREQUEST => "POST",
+			  CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n
+			  	<xml>\r\n    
+			  	<auth>\r\n       
+			  		<username>$mobile</username>\r\n  
+			       	<password>$password</password>\r\n   
+			        </auth>\r\n   
+			         	<lang>%en%</lang>\r\n  
+			           	<datetime></datetime>\r\n   
+			            <action>staffs</action>\r\n  
+			            <search>\r\n   
+			                <store_id>$store_id</store_id>\r\n 
+			                <is_child>$is_child</is_child>\r\n 
 			            </search>\r\n
 			    </xml>\r\n",
 			  CURLOPT_HTTPHEADER => array(

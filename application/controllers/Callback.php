@@ -44,7 +44,7 @@ class Callback extends CI_Controller {
 		
 		$this->load->model('Order_info');
 		$orderUpdate = true;
-		$is_child = true;
+		$is_child = '';
 
 		// 送られてきたメッセージの中身からレスポンスのタイプを選択
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
@@ -291,7 +291,7 @@ class Callback extends CI_Controller {
 							parse_str($dataPB, $postbackData);
 							//$this->saveLog("store_id", $postbackData['value']);
 							$lastOrder['step'] = 8;
-							$lastOrder['treatment_id'] = 4;
+							$lastOrder['treatment_id'] = $lastOrder['store_id'];
 							// $lastOrder['treatment_id'] = $postbackData['value'];
 						}
 					break;
@@ -322,7 +322,11 @@ class Callback extends CI_Controller {
 					case 9://DS DỊCH VỤ
 						$replyMsg = '施術一覧からタップ';
 						$listtreatment = 'Have not any staffs.';
-						$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+						if($is_child == false){
+							$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+						}else{
+							$results = $this->eyelash_api->listsetmenu($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+						}
 						if ($results != null){
 							$treatment = $results["response"]["Items"]["Item"];
 							
