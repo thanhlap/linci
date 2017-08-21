@@ -308,7 +308,7 @@ class Callback extends CI_Controller {
 						
 								$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
 				
-								if ($results != null && $results['search']['is_child'] == 'false'){
+								if ($results != null){
 									$treatment = $results["response"]["Items"]["Item"];
 									$arrtreatment = $this->filtertreatment($treatment);
 									if (count($arrtreatment) > 0)
@@ -328,7 +328,7 @@ class Callback extends CI_Controller {
 		
 						$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
 						
-						if ($results != null && $results['search']['is_child'] == 'false'){
+						if ($results != null){
 							$treatment = $results["response"]["Items"]["Item"];
 							
 							$arrtreatment = $this->filtertreatment($treatment, $message_text);
@@ -409,7 +409,7 @@ class Callback extends CI_Controller {
 						
 								$results = $this->eyelash_api->listsetmenu($lastOrder['username'], $lastOrder['password'], $lastOrder['menu_id']);
 				
-								if ($results != null && $results['search']['is_child'] == 'true'){
+								if ($results != null){
 									$menu = $results["response"]["Items"]["Item"];
 									$arrmenu = $this->filtertreatment($menu);
 									if (count($arrmenu) > 0)
@@ -429,7 +429,7 @@ class Callback extends CI_Controller {
 		
 						$results = $this->eyelash_api->listsetmenu($lastOrder['username'], $lastOrder['password'], $lastOrder['menu_id']);
 						
-						if ($results != null && $results['search']['is_child'] == 'true'){
+						if ($results != null){
 							$menu = $results["response"]["Items"]["Item"];
 							
 							$arrmenu = $this->filtertreatment($menu, $message_text);
