@@ -44,6 +44,7 @@ class Callback extends CI_Controller {
 		
 		$this->load->model('Order_info');
 		$orderUpdate = true;
+		$is_child = true;
 
 		// 送られてきたメッセージの中身からレスポンスのタイプを選択
 		if (($message->{"text"} == '予約') || ($message->{"text"} == '予約する')) {
@@ -229,7 +230,7 @@ class Callback extends CI_Controller {
 						
 					break;
 
-					case 6:
+					case 6://chon nguoi phu trach
 						$replyMsg = '担当者を入力してください。';
 						$listStaffs = 'Have not any staffs.';
 						$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['store_id']);
@@ -294,28 +295,40 @@ class Callback extends CI_Controller {
 						}
 					break;
 
-					// case 5:
-					// 	//search treatment_id để lấy ds người phụ trách
-					// 	if ($message_type == 'message'){
-					// 		$listStaffs = 'Have not any staff.';
-					// 		if($lastOrder['treatment_id'] && $lastOrder['treatment_id'] != ''){
-					// 			$data_chat['step'] = 6;
-					// 			$lastOrder['step'] = 6;
-					// 			$replyMsg = '担当者を入力してください。';
-					// 			$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
-					// 			if ($results != null){
-					// 				$staffs = $results["response"]["Items"]["Item"];
-					// 				$arrStaffs = $this->filterStaffs($staffs);
-					// 				if (count($arrStaffs) > 0)
-					// 					$listStaffs = implode("\n", $arrStaffs);
-					// 			}
-					// 		}
-					// 		$messageData = array(
-					// 			array('type' => 'text', 'text' => $replyMsg), 
-					// 			array('type' => 'text', 'text' => $listStaffs));
-					// 	}
+					case 8: 
+						//search treatment_id để lấy tât cả dịch vụ
+						if ($message_type == 'message'){
+							$listtreatment = 'Have not any staff.';
+							if($lastOrder['treatment_id'] && $is_child == 'false' && $lastOrder['treatment_id'] != ''){
+								$data_chat['step'] = 9;
+								$lastOrder['step'] = 9;
+								$replyMsg = '施術一覧からタップ';
+								$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+								if ($results != null){
+									$treatment = $results["response"]["Items"]["Item"];
+									$arrtreatment = $this->filtertreatment($treatment);
+									if (count($arrtreatment) > 0)
+										$listtreatment = implode("\n", $arrtreatment);
+								}
+							}else{
+								// $data_chat['step'] = 9;
+								// $lastOrder['step'] = 9;
+								// $replyMsg = '施術一覧からタップ';
+								// $results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+								// if ($results != null){
+								// 	$treatment = $results["response"]["Items"]["Item"];
+								// 	$arrtreatment = $this->filtertreatment($treatment);
+								// 	if (count($arrtreatment) > 0)
+								// 		$listtreatment = implode("\n", $arrtreatment);
+								// }
+								echo true;
+							}
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg), 
+								array('type' => 'text', 'text' => $listtreatment));
+						}
 						
-					// break;
+					break;
 
 					default:
 						$orderUpdate = false;
@@ -405,6 +418,24 @@ class Callback extends CI_Controller {
 				}
 				else
 					$arrItems[$item['staff_id']] = $item['lastname'];
+			}
+		}
+		return $arrItems;
+	}
+
+
+	//search dịch vụ
+	function filtertreatment($items, $keyword = ''){
+		$arrItems = array();
+		if(($items != NULL) && (count($items) > 0)){
+			foreach ($items as $item){
+				if ($keyword != ''){
+					if (strpos($item['name'], $keyword) !== false) {
+						$arrItems[$item['practitioner_id']] = $item['name'];
+					}
+				}
+				else
+					$arrItems[$item['practitioner_id']] = $item['name'];
 			}
 		}
 		return $arrItems;
