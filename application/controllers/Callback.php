@@ -306,7 +306,7 @@ class Callback extends CI_Controller {
 								$replyMsg = '施術一覧からタップ';
 								$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
 								if ($results != null){
-									// $treatment = $results["response"]["Items"]["Item"];
+									$treatment = $results["response"]["Items"]["Item"];
 									// $arrtreatment = $this->filtertreatment($treatment);
 									// if (count($arrtreatment) > 0)
 									// 	$listtreatment = implode("\n", $arrtreatment);
