@@ -381,38 +381,80 @@ class Callback extends CI_Controller {
 
 					break;
 
-					case 10://DS DỊCH VỤ
+					case 10:
+						//lấy $treatment_id cửa hàng đó luu vào order_info
+						if ($message_type == 'postback'){
+							$data_chat['step'] = 11;
+							// $data_chat['message_ref'] = $treatment_id;
+
+							$dataPB = $jsonObj->{"events"}[0]->{"postback"};
+							$dataPB = $dataPB->{"data"};
+							//$this->saveLog("dataPB", $dataPB);
+							parse_str($dataPB, $postbackData);
+							//$this->saveLog("store_id", $postbackData['value']);
+							$lastOrder['step'] = 11;
+							$lastOrder['menu_id'] = $lastOrder['store_id'];
+							// $lastOrder['treatment_id'] = $postbackData['value'];
+						}
+					break;
+
+					case 11: 
+						//search menu_id để lấy tât cả dịch vụ
+						if ($message_type == 'message'){
+							$listmenu = 'Have not any staff.';
+							if($lastOrder['menu_id'] && $lastOrder['menu_id'] != ''){
+								$data_chat['step'] = 12;
+								$lastOrder['step'] = 12;
+								$replyMsg = 'セットメニュー一覧からタップ';
+						
+								$results = $this->eyelash_api->listsetmenu($lastOrder['username'], $lastOrder['password'], $lastOrder['menu_id']);
+				
+								if ($results != null){
+									$menu = $results["response"]["Items"]["Item"];
+									$arrmenu = $this->filtertreatment($menu);
+									if (count($arrmenu) > 0)
+										$listmenu = implode("\n", $arrmenu);
+								}
+							}
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg), 
+								array('type' => 'text', 'text' => $listmenu));
+						}
+						
+					break;
+
+					case 12://DS DỊCH VỤ
 						$replyMsg = 'セットメニュー一覧からタップ';
-						$listtreatment = 'Have not any staffs.';
+						$listmenu = 'Have not any staffs.';
 		
-						$results = $this->eyelash_api->listsetmenu($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+						$results = $this->eyelash_api->listsetmenu($lastOrder['username'], $lastOrder['password'], $lastOrder['menu_id']);
 						
 						if ($results != null){
-							$treatment = $results["response"]["Items"]["Item"];
+							$menu = $results["response"]["Items"]["Item"];
 							
-							$arrtreatment = $this->filtertreatment($treatment, $message_text);
+							$arrmenu = $this->filtertreatment($menu, $message_text);
 							//show list staff
-							if (count($arrtreatment) > 4){
-								// $listtreatment = implode("\n", $arrtreatment);
-								$listtreatment .= $treatment['name'];
-								$listtreatment .= "\n\n";
+							if (count($arrmenu) > 4){
+								// $listmenu = implode("\n", $arrmenu);
+								$listmenu .= $menu['name'];
+								$listmenu .= "\n\n";
 
 								$messageData = array(
 									array('type' => 'text', 'text' => $replyMsg),
-									array('type' => 'text', 'text' => $listtreatment));
+									array('type' => 'text', 'text' => $listmenu));
 
-							}elseif (count($arrtreatment) > 0){//Show button treatment
+							}elseif (count($arrmenu) > 0){//Show button menu
 
-								$data_chat['step'] = 11;
-								$lastOrder['step'] = 11;
+								$data_chat['step'] = 13;
+								$lastOrder['step'] = 13;
 
 								$arrActions = array();
-								foreach ($arrtreatment as $treatment_id => $treatment_name){
+								foreach ($arrmenu as $menu_id => $menu_name){
 									$action = array();
 									$action['type'] = 'postback';
-									$action['label'] = $treatment_name;
-									$action['data'] = 'key=treatment&value=' . $treatment_id;
-									$action['text'] = $treatment_name;
+									$action['label'] = $menu_name;
+									$action['data'] = 'key=menu&value=' . $menu_id;
+									$action['text'] = $menu_name;
 									$arrActions[] = $action;
 								}
 								//ボタンタイプ
@@ -428,11 +470,11 @@ class Callback extends CI_Controller {
 								)];
 								
 							}else{
-								$arrtreatment = $this->filtertreatment($treatment);
-								$listtreatment = implode("\n", $arrtreatment);
+								$arrmenu = $this->filtertreatment($menu);
+								$listmenu = implode("\n", $arrmenu);
 								$messageData = array(
 									array('type' => 'text', 'text' => $replyMsg),
-									array('type' => 'text', 'text' => $listtreatment));
+									array('type' => 'text', 'text' => $listmenu));
 							}
 
 
@@ -448,7 +490,7 @@ class Callback extends CI_Controller {
 						$messageData = array(
 							array('type' => 'text', 'text' => $replyMsg),
 							array('type' => 'text', 'text' => 'step ' . $step),
-							array('type' => 'text', 'text' => $lastOrder['treatment_id'])
+							array('type' => 'text', 'text' => $lastOrder['menu_id'])
 						);
 						
 				}// switch ($step){ END
