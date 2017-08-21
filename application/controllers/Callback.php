@@ -339,7 +339,7 @@ class Callback extends CI_Controller {
 							//show list staff
 							if (count($arrtreatment) > 4){
 								// $listtreatment = implode("\n", $arrtreatment);
-								$listtreatment .= $treatment['name'];
+								$listtreatment .= $treatment['mobile_name'];
 								$listtreatment .= "\n\n";
 
 								$messageData = array(
