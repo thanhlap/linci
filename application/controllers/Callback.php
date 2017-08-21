@@ -243,6 +243,10 @@ class Callback extends CI_Controller {
 									array('type' => 'text', 'text' => $replyMsg),
 									array('type' => 'text', 'text' => $listStaffs));
 							}elseif (count($arrStaffs) > 0){//Show button staffs
+
+								$data_chat['step'] = 7;
+								$lastOrder['step'] = 7;
+
 								$arrActions = array();
 								foreach ($arrStaffs as $staff_id => $staff_name){
 									$action = array();
@@ -274,13 +278,52 @@ class Callback extends CI_Controller {
 						}			
 					break;
 
+					case 7:
+						//lấy $treatment_id cửa hàng đó luu vào order_info
+						if ($message_type == 'postback'){
+							$data_chat['step'] = 8;
+							$data_chat['message_ref'] = $treatment_id;
+
+							$dataPB = $jsonObj->{"events"}[0]->{"postback"};
+							$dataPB = $dataPB->{"data"};
+							//$this->saveLog("dataPB", $dataPB);
+							parse_str($dataPB, $postbackData);
+							//$this->saveLog("store_id", $postbackData['value']);
+							$lastOrder['step'] = 8;
+							$lastOrder['treatment_id'] = $postbackData['value'];
+						}
+					break;
+
+					// case 5:
+					// 	//search treatment_id để lấy ds người phụ trách
+					// 	if ($message_type == 'message'){
+					// 		$listStaffs = 'Have not any staff.';
+					// 		if($lastOrder['treatment_id'] && $lastOrder['treatment_id'] != ''){
+					// 			$data_chat['step'] = 6;
+					// 			$lastOrder['step'] = 6;
+					// 			$replyMsg = '担当者を入力してください。';
+					// 			$results = $this->eyelash_api->listStaff($lastOrder['username'], $lastOrder['password'], $lastOrder['treatment_id']);
+					// 			if ($results != null){
+					// 				$staffs = $results["response"]["Items"]["Item"];
+					// 				$arrStaffs = $this->filterStaffs($staffs);
+					// 				if (count($arrStaffs) > 0)
+					// 					$listStaffs = implode("\n", $arrStaffs);
+					// 			}
+					// 		}
+					// 		$messageData = array(
+					// 			array('type' => 'text', 'text' => $replyMsg), 
+					// 			array('type' => 'text', 'text' => $listStaffs));
+					// 	}
+						
+					// break;
+
 					default:
 						$orderUpdate = false;
 						$replyMsg = $message->{"text"};
 						$messageData = array(
 							array('type' => 'text', 'text' => $replyMsg),
 							array('type' => 'text', 'text' => 'step ' . $step),
-							array('type' => 'text', 'text' => $lastOrder['store_id'])
+							array('type' => 'text', 'text' => $lastOrder['treatment_id'])
 						);
 						
 				}// switch ($step){ END
