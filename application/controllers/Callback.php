@@ -508,16 +508,16 @@ class Callback extends CI_Controller {
 								$data_chat['step'] = 15;
 								$lastOrder['step'] = 15;
 								$replyMsg = '予約日を入力してください。(例) 20180731';
+								// $results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
 						
 								$results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
 				
 								if ($results != null){
-									$date = $results["response"];
-
-									$listdate = implode("\n", $date['message']);
-									// $arrdate = $this->filterdate($date);
-									// if (count($arrdate) > 0)
-									// 	$listdate = implode("\n", $arrdate);
+									$date = $results["search"]["date"];
+									
+									$arrdate = $this->filterdate($date);
+									if (count($arrdate) > 0)
+										$listdate = implode("\n", $arrdate);
 								}
 							}
 							$messageData = array(
@@ -527,69 +527,64 @@ class Callback extends CI_Controller {
 						
 					break;
 
-					// case 15://DS time
-					// 	$replyMsg = '予約日を入力してください。(例) 20180731';
-					// 	// $listdate = 'Have not any staffs.';
+					case 15://DS time
+						$replyMsg = '予約日を入力してください。(例) 20180731';
+						$listdate = 'Have not any staffs.';
 		
-					// 	$results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
+						$results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
 						
-					// 	if ($results != null){
-					// 		$date = $results["response"];
-					// 		$listdate = implode("\n", $date['message']);
+						if ($results != null){
+							$date = $results["search"]["date"];
+							
+							$arrdate = $this->filterdate($date, $message_text);
+							//show list staff
+							if (count($arrdate) > 4){
+								// $listdate = implode("\n", $arrdate);
+								$listdate .= $date;
+								$listdate .= "\n\n";
 
-					// 		// $arrdate = $this->filterdate($date, $message_text);
-					// 		// //show list staff
-					// 		// if (count($arrdate) > 4){
-					// 		// 	// $listdate = implode("\n", $arrdate);
-					// 		// 	$listdate .= $date['name'];
-					// 		// 	$listdate .= "\n\n";
+								$messageData = array(
+									array('type' => 'text', 'text' => $replyMsg),
+									array('type' => 'text', 'text' => $listdate));
 
-					// 		// 	$messageData = array(
-					// 		// 		array('type' => 'text', 'text' => $replyMsg),
-					// 		// 		array('type' => 'text', 'text' => $listdate));
+							}elseif (count($arrdate) > 0){//Show button date
 
-					// 		// }elseif (count($arrdate) > 0){//Show button date
+								$data_chat['step'] = 16;
+								$lastOrder['step'] = 16;
 
-					// 		// 	$data_chat['step'] = 16;
-					// 		// 	$lastOrder['step'] = 16;
-
-					// 		// 	$arrActions = array();
-					// 		// 	foreach ($arrdate as $date_id => $date_name){
-					// 		// 		$action = array();
-					// 		// 		$action['type'] = 'postback';
-					// 		// 		$action['label'] = $date_name;
-					// 		// 		$action['data'] = 'key=date&value=' . $date_id;
-					// 		// 		$action['text'] = $date_name;
-					// 		// 		$arrActions[] = $action;
-					// 		// 	}
-					// 		// 	//ボタンタイプ
-					// 		// 	$messageData = [array(
-					// 		// 			'type' => 'template',
-					// 		// 			'altText' => $replyMsg,
-					// 		// 			'template' => array(
-					// 		// 					'type' => 'buttons',
-					// 		// 					'title' => '担当者',
-					// 		// 					'text' => '選択してね',
-					// 		// 					'actions' => $arrActions
-					// 		// 			)
-					// 		// 	)];
+								$arrActions = array();
+								foreach ($arrdate as $date_id => $date_name){
+									$action = array();
+									$action['type'] = 'postback';
+									$action['label'] = $date_name;
+									$action['data'] = 'key=date&value=' . $date_id;
+									$action['text'] = $date_name;
+									$arrActions[] = $action;
+								}
+								//ボタンタイプ
+								$messageData = [array(
+										'type' => 'template',
+										'altText' => $replyMsg,
+										'template' => array(
+												'type' => 'buttons',
+												'title' => '担当者',
+												'text' => '選択してね',
+												'actions' => $arrActions
+										)
+								)];
 								
-					// 		// }else{
-					// 		// 	$arrdate = $this->filterdate($date);
-					// 		// 	$listdate = implode("\n", $arrdate);
-					// 		// 	$messageData = array(
-					// 		// 		array('type' => 'text', 'text' => $replyMsg),
-					// 		// 		array('type' => 'text', 'text' => $listdate));
-					// 		// }
-
-					// 		$messageData = array(
-					// 			array('type' => 'text', 'text' => $replyMsg),
-					// 			array('type' => 'text', 'text' => $listdate));
+							}else{
+								$arrdate = $this->filterdate($date);
+								$listdate = implode("\n", $arrdate);
+								$messageData = array(
+									array('type' => 'text', 'text' => $replyMsg),
+									array('type' => 'text', 'text' => $listdate));
+							}
 
 
-					// 	}	
+						}	
 
-					// break;
+					break;
 
 
 					default:
@@ -703,22 +698,22 @@ class Callback extends CI_Controller {
 		return $arrItems;
 	}
 	
-	// //search date
-	// function filterdate($items, $keyword = ''){
-	// 	$arrItems = array();
-	// 	if(($items != NULL) && (count($items) > 0)){
-	// 		foreach ($items as $item){
-	// 			if ($keyword != ''){
-	// 				if (strpos($item['time'], $keyword) !== false) {
-	// 					$arrItems[$item['practitioner_id']] = $item['time'];
-	// 				}
-	// 			}
-	// 			else
-	// 				$arrItems[$item['practitioner_id']] = $item['time'];
-	// 		}
-	// 	}
-	// 	return $arrItems;
-	// }
+	//search date
+	function filterdate($items, $keyword = ''){
+		$arrItems = array();
+		if(($items != NULL) && (count($items) > 0)){
+			foreach ($items as $item){
+				if ($keyword != ''){
+					if (strpos($item['date'], $keyword) !== false) {
+						$arrItems[$item['practitioner_id']] = $item['date'];
+					}
+				}
+				else
+					$arrItems[$item['practitioner_id']] = $item['date'];
+			}
+		}
+		return $arrItems;
+	}
 
 
 

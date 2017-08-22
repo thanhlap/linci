@@ -260,13 +260,13 @@ class Eyelash_api{
 			              	</auth>\n 
 			                 	<action>nonreserve</action>\n
 			                 	<lang>ja</lang>\n 
-			                    <datetime>$api_time</datetime>\n 
+			                    <datetime>$api_time</datetime>
 			                    <search>\n      
-			                        <store_id></store_id>\n   
+			                        <store_id>10</store_id>\n   
 			                        <staff_id></staff_id>\n  
-			                        <date></date>\n  
+			                        <date>2018-01-02</date>\n  
 			                        <practitioner_id>$practitioner_id</practitioner_id>\n    
-			                        <setmenu_id></setmenu_id>\n  
+			                        <setmenu_id>29</setmenu_id>\n  
 			                        </search>\n
 			    </xml>",
 			  CURLOPT_HTTPHEADER => array(
