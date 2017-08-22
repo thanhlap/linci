@@ -484,7 +484,7 @@ class Callback extends CI_Controller {
 
 
 					case 13:
-						//lấy $practitioner_id cửa hàng đó luu vào order_info
+						//lấy $practitioner_id date đó luu vào order_info
 						if ($message_type == 'postback'){
 							$data_chat['step'] = 14;
 							// $data_chat['message_ref'] = $practitioner_id;
@@ -501,13 +501,13 @@ class Callback extends CI_Controller {
 					break;
 
 					case 14: 
-						//search practitioner_id để lấy tât cả dịch vụ
+						//search practitioner_id để lấy tât cả date
 						if ($message_type == 'message'){
 							$listdate = 'Have not any staff.';
 							if($lastOrder['practitioner_id'] && $lastOrder['practitioner_id'] != ''){
-								$data_chat['step'] = 9;
-								$lastOrder['step'] = 9;
-								$replyMsg = '予約日を入力してください。\n 例 20180731';
+								$data_chat['step'] = 15;
+								$lastOrder['step'] = 15;
+								$replyMsg = '予約日を入力してください。(例) 20180731';
 								// $results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
 						
 								$results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
@@ -526,64 +526,64 @@ class Callback extends CI_Controller {
 						
 					break;
 
-					// case 9://DS DỊCH VỤ
-					// 	$replyMsg = '施術一覧からタップ';
-					// 	$listtreatment = 'Have not any staffs.';
+					case 15://DS time
+						$replyMsg = '予約日を入力してください。(例) 20180731';
+						$listdate = 'Have not any staffs.';
 		
-					// 	$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
+						$results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
 						
-					// 	if ($results != null){
-					// 		$treatment = $results["response"]["Items"]["Item"];
+						if ($results != null){
+							$date = $results["response"]["Items"]["Item"];
 							
-					// 		$arrtreatment = $this->filtertreatment($treatment, $message_text);
-					// 		//show list staff
-					// 		if (count($arrtreatment) > 4){
-					// 			// $listtreatment = implode("\n", $arrtreatment);
-					// 			$listtreatment .= $treatment['name'];
-					// 			$listtreatment .= "\n\n";
+							$arrdate = $this->filterdate($date, $message_text);
+							//show list staff
+							if (count($arrdate) > 4){
+								// $listdate = implode("\n", $arrdate);
+								$listdate .= $date['name'];
+								$listdate .= "\n\n";
 
-					// 			$messageData = array(
-					// 				array('type' => 'text', 'text' => $replyMsg),
-					// 				array('type' => 'text', 'text' => $listtreatment));
+								$messageData = array(
+									array('type' => 'text', 'text' => $replyMsg),
+									array('type' => 'text', 'text' => $listdate));
 
-					// 		}elseif (count($arrtreatment) > 0){//Show button treatment
+							}elseif (count($arrdate) > 0){//Show button date
 
-					// 			$data_chat['step'] = 10;
-					// 			$lastOrder['step'] = 10;
+								$data_chat['step'] = 16;
+								$lastOrder['step'] = 16;
 
-					// 			$arrActions = array();
-					// 			foreach ($arrtreatment as $treatment_id => $treatment_name){
-					// 				$action = array();
-					// 				$action['type'] = 'postback';
-					// 				$action['label'] = $treatment_name;
-					// 				$action['data'] = 'key=treatment&value=' . $treatment_id;
-					// 				$action['text'] = $treatment_name;
-					// 				$arrActions[] = $action;
-					// 			}
-					// 			//ボタンタイプ
-					// 			$messageData = [array(
-					// 					'type' => 'template',
-					// 					'altText' => $replyMsg,
-					// 					'template' => array(
-					// 							'type' => 'buttons',
-					// 							'title' => '担当者',
-					// 							'text' => '選択してね',
-					// 							'actions' => $arrActions
-					// 					)
-					// 			)];
+								$arrActions = array();
+								foreach ($arrdate as $date_id => $date_name){
+									$action = array();
+									$action['type'] = 'postback';
+									$action['label'] = $date_name;
+									$action['data'] = 'key=date&value=' . $date_id;
+									$action['text'] = $date_name;
+									$arrActions[] = $action;
+								}
+								//ボタンタイプ
+								$messageData = [array(
+										'type' => 'template',
+										'altText' => $replyMsg,
+										'template' => array(
+												'type' => 'buttons',
+												'title' => '担当者',
+												'text' => '選択してね',
+												'actions' => $arrActions
+										)
+								)];
 								
-					// 		}else{
-					// 			$arrtreatment = $this->filtertreatment($treatment);
-					// 			$listtreatment = implode("\n", $arrtreatment);
-					// 			$messageData = array(
-					// 				array('type' => 'text', 'text' => $replyMsg),
-					// 				array('type' => 'text', 'text' => $listtreatment));
-					// 		}
+							}else{
+								$arrdate = $this->filterdate($date);
+								$listdate = implode("\n", $arrdate);
+								$messageData = array(
+									array('type' => 'text', 'text' => $replyMsg),
+									array('type' => 'text', 'text' => $listdate));
+							}
 
 
-					// 	}	
+						}	
 
-					// break;
+					break;
 
 
 					default:
