@@ -238,4 +238,56 @@ class Eyelash_api{
 			}
 	}
 
+
+	function listdate($mobile, $password, $practitioner_id){
+			$api_time = Date('Y-m-d H:i:s');
+
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+			  CURLOPT_URL => "https://web.eyelashs.jp/Procare1/api/reserves/nonreserve.xml",
+			  CURLOPT_RETURNTRANSFER => true,
+			  CURLOPT_ENCODING => "",
+			  CURLOPT_MAXREDIRS => 10,
+			  CURLOPT_TIMEOUT => 30,
+			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			  CURLOPT_CUSTOMREQUEST => "POST",
+			  CURLOPT_POSTFIELDS => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n
+			  	<xml>\n   
+			   		<auth>\n   
+			        		<username>$mobile</username>\n  
+			             	<password>$password</password>\n
+			              	</auth>\n 
+			                 	<action>nonreserve</action>\n
+			                 	<lang>ja</lang>\n 
+			                    <datetime>$api_time</datetime>\n 
+			                    <search>\n      
+			                        <store_id></store_id>\n   
+			                        <staff_id></staff_id>\n  
+			                        <date></date>\n  
+			                        <practitioner_id>$practitioner_id</practitioner_id>\n    
+			                        <setmenu_id></setmenu_id>\n  
+			                        </search>\n
+			    </xml>",
+			  CURLOPT_HTTPHEADER => array(
+			    "cache-control: no-cache",
+			    "content-type: application/xml",
+			    "postman-token: d740413a-a1e7-4ecd-24b5-cc065180c862"
+			  ),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+
+			if ($err) {
+			  echo "cURL Error #:" . $err;
+			} else {
+			  echo $response;
+			}
+
+
+	}
+
 }

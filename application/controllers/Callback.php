@@ -483,6 +483,108 @@ class Callback extends CI_Controller {
 					break;
 
 
+					case 13:
+						//lấy $practitioner_id cửa hàng đó luu vào order_info
+						if ($message_type == 'postback'){
+							$data_chat['step'] = 14;
+							// $data_chat['message_ref'] = $practitioner_id;
+
+							$dataPB = $jsonObj->{"events"}[0]->{"postback"};
+							$dataPB = $dataPB->{"data"};
+							//$this->saveLog("dataPB", $dataPB);
+							parse_str($dataPB, $postbackData);
+							//$this->saveLog("store_id", $postbackData['value']);
+							$lastOrder['step'] = 14;
+							// $lastOrder['practitioner_id'] = $lastOrder['store_id'];
+							$lastOrder['practitioner_id'] = $postbackData['value'];
+						}
+					break;
+
+					case 14: 
+						//search practitioner_id để lấy tât cả dịch vụ
+						if ($message_type == 'message'){
+							$listdate = 'Have not any staff.';
+							if($lastOrder['practitioner_id'] && $lastOrder['practitioner_id'] != ''){
+								$data_chat['step'] = 9;
+								$lastOrder['step'] = 9;
+								$replyMsg = '予約日を入力してください。\n 例 20180731';
+								// $results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
+						
+								$results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
+				
+								if ($results != null){
+									$date = $results["response"]["Items"]["Item"];
+									$arrdate = $this->filterdate($date);
+									if (count($arrdate) > 0)
+										$listdate = implode("\n", $arrdate);
+								}
+							}
+							$messageData = array(
+								array('type' => 'text', 'text' => $replyMsg), 
+								array('type' => 'text', 'text' => $listdate));
+						}
+						
+					break;
+
+					// case 9://DS DỊCH VỤ
+					// 	$replyMsg = '施術一覧からタップ';
+					// 	$listtreatment = 'Have not any staffs.';
+		
+					// 	$results = $this->eyelash_api->listtreatment($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
+						
+					// 	if ($results != null){
+					// 		$treatment = $results["response"]["Items"]["Item"];
+							
+					// 		$arrtreatment = $this->filtertreatment($treatment, $message_text);
+					// 		//show list staff
+					// 		if (count($arrtreatment) > 4){
+					// 			// $listtreatment = implode("\n", $arrtreatment);
+					// 			$listtreatment .= $treatment['name'];
+					// 			$listtreatment .= "\n\n";
+
+					// 			$messageData = array(
+					// 				array('type' => 'text', 'text' => $replyMsg),
+					// 				array('type' => 'text', 'text' => $listtreatment));
+
+					// 		}elseif (count($arrtreatment) > 0){//Show button treatment
+
+					// 			$data_chat['step'] = 10;
+					// 			$lastOrder['step'] = 10;
+
+					// 			$arrActions = array();
+					// 			foreach ($arrtreatment as $treatment_id => $treatment_name){
+					// 				$action = array();
+					// 				$action['type'] = 'postback';
+					// 				$action['label'] = $treatment_name;
+					// 				$action['data'] = 'key=treatment&value=' . $treatment_id;
+					// 				$action['text'] = $treatment_name;
+					// 				$arrActions[] = $action;
+					// 			}
+					// 			//ボタンタイプ
+					// 			$messageData = [array(
+					// 					'type' => 'template',
+					// 					'altText' => $replyMsg,
+					// 					'template' => array(
+					// 							'type' => 'buttons',
+					// 							'title' => '担当者',
+					// 							'text' => '選択してね',
+					// 							'actions' => $arrActions
+					// 					)
+					// 			)];
+								
+					// 		}else{
+					// 			$arrtreatment = $this->filtertreatment($treatment);
+					// 			$listtreatment = implode("\n", $arrtreatment);
+					// 			$messageData = array(
+					// 				array('type' => 'text', 'text' => $replyMsg),
+					// 				array('type' => 'text', 'text' => $listtreatment));
+					// 		}
+
+
+					// 	}	
+
+					// break;
+
 
 					default:
 						$orderUpdate = false;
@@ -490,7 +592,7 @@ class Callback extends CI_Controller {
 						$messageData = array(
 							array('type' => 'text', 'text' => $replyMsg),
 							array('type' => 'text', 'text' => 'step ' . $step),
-							array('type' => 'text', 'text' => $lastOrder['menu_id'])
+							array('type' => 'text', 'text' => $lastOrder['practitioner_id'])
 						);
 						
 				}// switch ($step){ END
@@ -595,6 +697,24 @@ class Callback extends CI_Controller {
 		return $arrItems;
 	}
 	
+	//search date
+	function filterdate($items, $keyword = ''){
+		$arrItems = array();
+		if(($items != NULL) && (count($items) > 0)){
+			foreach ($items as $item){
+				if ($keyword != ''){
+					if (strpos($item['time'], $keyword) !== false) {
+						$arrItems[$item['practitioner_id']] = $item['time'];
+					}
+				}
+				else
+					$arrItems[$item['practitioner_id']] = $item['time'];
+			}
+		}
+		return $arrItems;
+	}
+
+
 
 	// function testChat($message){
 	// 	if ($message->{"text"} == '確認') {
