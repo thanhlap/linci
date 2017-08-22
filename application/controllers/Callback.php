@@ -514,9 +514,11 @@ class Callback extends CI_Controller {
 				
 								if ($results != null){
 									$date = $results["response"]["Items"]["Item"];
-									$arrdate = $this->filterdate($date);
-									if (count($arrdate) > 0)
-										$listdate = implode("\n", $arrdate);
+
+									$listdate = implode("\n", $date['message']);
+									// $arrdate = $this->filterdate($date);
+									// if (count($arrdate) > 0)
+									// 	$listdate = implode("\n", $arrdate);
 								}
 							}
 							$messageData = array(
@@ -697,22 +699,22 @@ class Callback extends CI_Controller {
 		return $arrItems;
 	}
 	
-	//search date
-	function filterdate($items, $keyword = ''){
-		$arrItems = array();
-		if(($items != NULL) && (count($items) > 0)){
-			foreach ($items as $item){
-				if ($keyword != ''){
-					if (strpos($item['time'], $keyword) !== false) {
-						$arrItems[$item['practitioner_id']] = $item['time'];
-					}
-				}
-				else
-					$arrItems[$item['practitioner_id']] = $item['time'];
-			}
-		}
-		return $arrItems;
-	}
+	// //search date
+	// function filterdate($items, $keyword = ''){
+	// 	$arrItems = array();
+	// 	if(($items != NULL) && (count($items) > 0)){
+	// 		foreach ($items as $item){
+	// 			if ($keyword != ''){
+	// 				if (strpos($item['time'], $keyword) !== false) {
+	// 					$arrItems[$item['practitioner_id']] = $item['time'];
+	// 				}
+	// 			}
+	// 			else
+	// 				$arrItems[$item['practitioner_id']] = $item['time'];
+	// 		}
+	// 	}
+	// 	return $arrItems;
+	// }
 
 
 
