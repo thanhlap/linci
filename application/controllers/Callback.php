@@ -503,7 +503,7 @@ class Callback extends CI_Controller {
 					case 14: 
 						//search practitioner_id để lấy tât cả date
 						if ($message_type == 'message'){
-							$listdate = 'Have not any staff.';
+							// $listdate = 'Have not any staff.';
 							if($lastOrder['practitioner_id'] && $lastOrder['practitioner_id'] != ''){
 								$data_chat['step'] = 15;
 								$lastOrder['step'] = 15;
@@ -513,7 +513,7 @@ class Callback extends CI_Controller {
 								$results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
 				
 								if ($results != null){
-									$date = $results["response"]["Items"]["Item"];
+									$date = $results["response"];
 
 									$listdate = implode("\n", $date['message']);
 									// $arrdate = $this->filterdate($date);
@@ -535,9 +535,9 @@ class Callback extends CI_Controller {
 						$results = $this->eyelash_api->listdate($lastOrder['username'], $lastOrder['password'], $lastOrder['practitioner_id']);
 						
 						if ($results != null){
-							$date = $results["response"]["Items"]["Item"];
+							$date = $results["response"];
 							$listdate = implode("\n", $date['message']);
-							
+
 							// $arrdate = $this->filterdate($date, $message_text);
 							// //show list staff
 							// if (count($arrdate) > 4){
